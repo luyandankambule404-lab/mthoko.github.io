@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="About Mthokozisi Luyanda Nkambule — Software Engineering graduate from Manzini, Eswatini, and passionate football supporter." />
+  <meta name="theme-color" content="#f5a623" />
+  <title>About Me | Mthokozisi Luyanda Nkambule</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="about">
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
+  <div class="page-decor" aria-hidden="true"><span class="decor-ball decor-ball-1">⚽</span><span class="decor-ball decor-ball-2">⚽</span></div>
+
+  <header class="site-header">
+    <a class="logo" href="index.html">
+      <img src="images/profile.png" alt="" class="logo-avatar" width="36" height="36" />
+      <span>Mthokozisi Nkambule</span>
+    </a>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="site-nav">
+      <a href="index.html" data-nav-page="home">Home</a>
+      <a href="about.html" data-nav-page="about">About Me</a>
+      <a href="posts.html" data-nav-page="posts">My Posts</a>
+      <a href="news.html" data-nav-page="news">News</a>
+      <a href="dashboard.html" data-nav-page="dashboard">Dashboard</a>
+      <a href="contact.html" data-nav-page="contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero reveal">
+      <a class="page-back" href="index.html">← Return to home</a>
+      <h1>About Me</h1>
+      <p class="page-hero-lead">A 27-year-old software engineering graduate from Manzini who loves football</p>
+    </section>
+
+    <section class="section reveal" id="about">
+      <div class="section-head">
+        <img src="images/profile.png" alt="" class="section-avatar" width="56" height="56" />
+        <h2>My Story</h2>
+      </div>
+      <p class="about-lead">
+        I am <strong>Mthokozisi Luyanda Nkambule</strong> — a
+        <strong>27-year-old man</strong> who holds a <strong>Diploma in Software Engineering</strong>.
+        I live in <strong>Manzini, Ngwane Park</strong>, Eswatini.
+      </p>
+      <p>
+        I take great pride in building
+        solutions with technology. Football is another major part of my life — whether I am playing,
+        watching a match, or discussing the game with friends. This website is my platform for
+        sharing updates on my career, interests, and personal journey.
+      </p>
+      <p>
+        You are welcome to read <a href="posts.html">my posts</a> or
+        <a href="contact.html">contact me</a> by phone, WhatsApp, or email.
+      </p>
+
+      <div class="teams-block">
+        <h3 class="teams-heading">Clubs I Support</h3>
+        <ul class="teams-list" aria-label="Football clubs I support">
+          <li><a class="team-pill team-pirates" href="https://www.orlandopiratesfc.com/" target="_blank" rel="noopener noreferrer">Orlando Pirates</a></li>
+          <li><a class="team-pill team-united" href="https://www.manutd.com/" target="_blank" rel="noopener noreferrer">Manchester United</a></li>
+          <li><a class="team-pill team-barca" href="https://www.fcbarcelona.com/" target="_blank" rel="noopener noreferrer">Barcelona</a></li>
+          <li><a class="team-pill team-highlanders" href="https://mbabanehighlandersam.co.sz/" target="_blank" rel="noopener noreferrer">Mbabane Highlanders</a></li>
+        </ul>
+      </div>
+
+      <ul class="skills" aria-label="Areas of interest">
+        <li>Software Engineering</li>
+        <li>Football</li>
+        <li>Orlando Pirates</li>
+        <li>Manchester United</li>
+        <li>Barcelona</li>
+        <li>Mbabane Highlanders</li>
+        <li>Manzini</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <img src="images/profile.png" alt="" class="footer-avatar" width="48" height="48" />
+    <p>© <span id="year"></span> Mthokozisi Luyanda Nkambule</p>
+    <p class="footer-tagline">Software Engineering · Manzini · Orlando Pirates · Manchester United · Barcelona · Mbabane Highlanders</p>
+    <p class="footer-links">
+      <a href="https://wa.me/26878462761" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      <span class="footer-dot">·</span>
+      <a href="tel:+26878462761">+268 7846 2761</a>
+      <span class="footer-dot">·</span>
+      <a href="mailto:mthokozisinkambule06@gmail.com">Email</a>
+    </p>
+  </footer>
+
+  <button type="button" class="fab fab-top" id="back-top" aria-label="Back to top" hidden>
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+  <script src="script.js"></script>
+</body>
+</html>
