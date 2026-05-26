@@ -1,0 +1,9 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# Keep all site images (required for photos on GitHub Pages)
+!images/
+!images/**
