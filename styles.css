@@ -1458,6 +1458,8 @@ body.nav-open {
 
 .subscribe-form {
   margin-top: 1rem;
+  width: 100%;
+  max-width: 700px;
 }
 
 .subscribe-label {
@@ -1470,14 +1472,16 @@ body.nav-open {
 
 .subscribe-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.65rem;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 .subscribe-input {
-  flex: 1 1 240px;
-  min-height: 48px;
-  padding: 0.75rem 0.9rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 1rem;
   border: 2px solid rgba(255, 255, 255, 0.55);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);
@@ -1501,6 +1505,10 @@ body.nav-open {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-on-gold);
+}
+
+.subscribe-row .btn {
+  width: 100%;
 }
 
 .btn-lg {
@@ -1733,10 +1741,6 @@ body.nav-open {
   .landing-actions {
     flex-direction: column;
     width: 100%;
-  }
-
-  .subscribe-row {
-    flex-direction: column;
   }
 
   .subscribe-row .btn {
