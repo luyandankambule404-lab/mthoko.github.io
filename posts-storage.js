@@ -1,4 +1,5 @@
 const POSTS_STORAGE_KEY = "mthokozisi_site_posts";
+const SUBSCRIBERS_STORAGE_KEY = "mthokozisi_site_subscribers";
 
 function ensurePostId(post) {
   if (!post.id) {
@@ -63,4 +64,40 @@ function downloadPostsJs() {
 function resetPostsToFileDefaults() {
   localStorage.removeItem(POSTS_STORAGE_KEY);
   return getDefaultPosts();
+}
+
+function loadSubscribers() {
+  try {
+    const raw = localStorage.getItem(SUBSCRIBERS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed.filter((item) => item && typeof item.email === "string");
+      }
+    }
+  } catch {
+    /* return empty list */
+  }
+  return [];
+}
+
+function saveSubscribers(subscribers) {
+  localStorage.setItem(SUBSCRIBERS_STORAGE_KEY, JSON.stringify(subscribers));
+}
+
+function addSubscriber(email) {
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+  if (!normalizedEmail) return { added: false, reason: "empty" };
+
+  const subscribers = loadSubscribers();
+  const exists = subscribers.some((item) => item.email === normalizedEmail);
+  if (exists) return { added: false, reason: "exists" };
+
+  subscribers.unshift({
+    id: `s_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+    email: normalizedEmail,
+    subscribedAt: new Date().toISOString(),
+  });
+  saveSubscribers(subscribers);
+  return { added: true };
 }

@@ -178,6 +178,33 @@ function renderDashboardList() {
   });
 }
 
+function renderSubscribersList() {
+  const list = document.getElementById("subscribers-list");
+  if (!list) return;
+
+  const subscribers = loadSubscribers();
+  if (!subscribers.length) {
+    list.innerHTML =
+      '<p class="dashboard-empty">No subscribers yet. New email subscriptions will appear here.</p>';
+    return;
+  }
+
+  list.innerHTML = subscribers
+    .map(
+      (subscriber) => `
+    <article class="dashboard-item">
+      <div class="dashboard-item-head">
+        <time datetime="${escapeHtml(subscriber.subscribedAt || "")}">
+          ${formatDate((subscriber.subscribedAt || "").slice(0, 10))}
+        </time>
+      </div>
+      <h3>${escapeHtml(subscriber.email)}</h3>
+    </article>
+  `
+    )
+    .join("");
+}
+
 function resetForm() {
   const form = document.getElementById("post-form");
   if (!form) return;
@@ -284,6 +311,7 @@ function initDashboard() {
   });
 
   renderDashboardList();
+  renderSubscribersList();
 }
 
 function bootDashboard() {

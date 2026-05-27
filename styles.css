@@ -1456,6 +1456,53 @@ body.nav-open {
   justify-content: center;
 }
 
+.subscribe-form {
+  margin-top: 1rem;
+}
+
+.subscribe-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-on-gold);
+}
+
+.subscribe-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.subscribe-input {
+  flex: 1 1 240px;
+  min-height: 48px;
+  padding: 0.75rem 0.9rem;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text);
+  font: inherit;
+}
+
+.subscribe-input::placeholder {
+  color: var(--text-muted);
+}
+
+.subscribe-input:focus {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+  border-color: var(--white);
+  background: var(--white);
+}
+
+.subscribe-status {
+  margin: 0.6rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-on-gold);
+}
+
 .btn-lg {
   padding: 0.9rem 1.75rem;
   font-size: 1rem;
@@ -1685,6 +1732,14 @@ body.nav-open {
 
   .landing-actions {
     flex-direction: column;
+    width: 100%;
+  }
+
+  .subscribe-row {
+    flex-direction: column;
+  }
+
+  .subscribe-row .btn {
     width: 100%;
   }
 

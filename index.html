@@ -64,6 +64,22 @@
             <a class="btn btn-secondary btn-lg" href="posts.html">My Posts</a>
             <a class="btn btn-whatsapp btn-lg" href="https://wa.me/26878462761" target="_blank" rel="noopener noreferrer">Message on WhatsApp</a>
           </div>
+          <form class="subscribe-form" id="subscribe-form" aria-label="Subscribe to updates">
+            <label for="subscribe-email" class="subscribe-label">Get new posts by email</label>
+            <div class="subscribe-row">
+              <input
+                id="subscribe-email"
+                name="email"
+                type="email"
+                class="subscribe-input"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+              />
+              <button type="submit" class="btn btn-primary btn-lg">Subscribe</button>
+            </div>
+            <p id="subscribe-status" class="subscribe-status" role="status" aria-live="polite"></p>
+          </form>
         </div>
         <figure class="landing-photo-frame">
           <img

@@ -262,6 +262,40 @@ if (form) {
   });
 }
 
+const subscribeForm = document.getElementById("subscribe-form");
+if (subscribeForm) {
+  const statusEl = document.getElementById("subscribe-status");
+
+  const setSubscribeStatus = (message) => {
+    if (!statusEl) return;
+    statusEl.textContent = message;
+  };
+
+  subscribeForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(subscribeForm);
+    const email = String(data.get("email") || "").trim();
+    if (!email) {
+      setSubscribeStatus("Please enter your email address.");
+      return;
+    }
+
+    const result = addSubscriber(email);
+    if (result.added) {
+      setSubscribeStatus("Subscribed successfully. Thank you.");
+      subscribeForm.reset();
+      return;
+    }
+
+    if (result.reason === "exists") {
+      setSubscribeStatus("This email is already subscribed.");
+      return;
+    }
+
+    setSubscribeStatus("Unable to subscribe right now. Please try again.");
+  });
+}
+
 setGreeting();
 renderFeaturedPost();
 renderPosts();
