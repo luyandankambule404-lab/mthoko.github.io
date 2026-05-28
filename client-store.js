@@ -55,8 +55,23 @@ const KmmClient = (function () {
     return _user;
   }
 
+  function offlineMessage() {
+    const host = window.location.hostname;
+    if (host.endsWith("github.io")) {
+      return "Sign-in needs the KMM server. On your PC, open the lifestyle folder in a terminal and run: npm start — then use http://localhost:3000/dashboard.html";
+    }
+    return "Server is offline. In the project folder run: npm start — then open http://localhost:3000/dashboard.html";
+  }
+
+  async function ensureApi() {
+    if (_useApi) return true;
+    await KmmApi.checkHealth();
+    _useApi = KmmApi.isAvailable();
+    return _useApi;
+  }
+
   async function register({ name, email, phone, password }) {
-    if (!_useApi) return { ok: false, error: "Server is offline. Run: cd server && npm start" };
+    if (!(await ensureApi())) return { ok: false, error: offlineMessage() };
     try {
       const res = await KmmApi.request("/auth/register", {
         method: "POST",
@@ -72,7 +87,7 @@ const KmmClient = (function () {
   }
 
   async function login(email, password) {
-    if (!_useApi) return { ok: false, error: "Server is offline. Run: cd server && npm start" };
+    if (!(await ensureApi())) return { ok: false, error: offlineMessage() };
     try {
       const res = await KmmApi.request("/auth/login", {
         method: "POST",
@@ -175,7 +190,7 @@ const KmmClient = (function () {
   }
 
   async function socialLogin(provider) {
-    if (!_useApi) return { ok: false, error: "Server is offline. Run: cd server && npm start" };
+    if (!(await ensureApi())) return { ok: false, error: offlineMessage() };
     try {
       const res = await KmmApi.request("/auth/social", {
         method: "POST",

@@ -540,7 +540,8 @@
         }
       } catch {
         if (loginError) {
-          loginError.textContent = "Cannot reach server. Run: cd server && npm start";
+          loginError.textContent =
+            "Cannot reach server. In the project folder run: npm start — then open http://localhost:3000/admin.html";
           loginError.hidden = false;
         }
       }

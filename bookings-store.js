@@ -123,6 +123,10 @@ const KmmBookings = (function () {
 
   async function login(password) {
     if (!_useApi) {
+      await KmmApi.checkHealth();
+      _useApi = KmmApi.isAvailable();
+    }
+    if (!_useApi) {
       const ADMIN_PASSWORD = "kmmadmin2025";
       if (String(password || "").trim() === ADMIN_PASSWORD) {
         sessionStorage.setItem("kmm_admin_legacy", "1");

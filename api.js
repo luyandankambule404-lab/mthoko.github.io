@@ -8,10 +8,19 @@ const KmmApi = (function () {
   function apiBase() {
     if (window.KMM_API_URL) return window.KMM_API_URL.replace(/\/$/, "");
     const { protocol, hostname, port } = window.location;
-    if (port === "3000" || (hostname === "localhost" && !port)) {
-      return `${protocol}//${hostname}:3000/api`;
+    if (protocol === "file:") {
+      return "http://localhost:3000/api";
     }
     if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return `${protocol}//${hostname}:3000/api`;
+    }
+    if (port === "3000") {
+      return `${protocol}//${hostname}:${port}/api`;
+    }
+    if (hostname.endsWith("github.io")) {
+      return null;
+    }
+    if (port && port !== "3000") {
       return `${protocol}//${hostname}:3000/api`;
     }
     return "/api";
@@ -43,7 +52,13 @@ const KmmApi = (function () {
 
   async function request(path, options = {}) {
     const { auth = "none", method = "GET", body, headers = {} } = options;
-    const url = `${apiBase()}${path}`;
+    const base = apiBase();
+    if (!base) {
+      const err = new Error("API not available on static hosting.");
+      err.status = 0;
+      throw err;
+    }
+    const url = `${base}${path}`;
     const reqHeaders = { "Content-Type": "application/json", ...headers };
 
     if (auth === "client" && clientToken) {
