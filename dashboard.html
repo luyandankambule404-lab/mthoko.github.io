@@ -2,129 +2,180 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="robots" content="noindex, nofollow" />
-  <meta name="theme-color" content="#f5a623" />
-  <title>Dashboard | Mthokozisi Luyanda Nkambule</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="KMM Lifestyle client dashboard — manage bookings, favorites, profile, invoices, and support." />
+  <title>KMM Lifestyle | My Dashboard</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <script src="profile-fix.js?v=1"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
 </head>
-<body data-page="dashboard">
-  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
-
-  <div id="dashboard-login" class="dashboard-login">
-    <div class="dashboard-login-card">
-      <img src="profile.png" alt="" class="dashboard-login-avatar" width="72" height="72" />
-      <h1>Admin sign in</h1>
-      <p>Enter your password to manage posts on the dashboard.</p>
-      <form id="dashboard-login-form" class="dashboard-login-form" action="#" method="post">
-        <label>
-          Password
-          <input type="password" id="dashboard-password" name="password" required autocomplete="current-password" placeholder="Enter admin password" />
-        </label>
-        <p id="dashboard-login-error" class="dashboard-login-error" hidden>Incorrect password. Please try again.</p>
-        <button type="submit" class="btn btn-primary" id="dashboard-login-btn">Sign in</button>
+<body>
+  <div id="authScreen" class="dash-auth">
+    <div class="dash-auth__card">
+      <a href="index.html" class="dash-logo" aria-label="KMM Lifestyle Home">
+        <img src="assets/logo.png" alt="KMM Lifestyle" class="dash-logo__img" width="140" height="44" />
+        <span class="dash-logo__sub">Client Dashboard</span>
+      </a>
+      <p class="dash-auth__sub">Sign in or create an account to manage your stays.</p>
+      <div class="dash-auth__tabs">
+        <button type="button" class="dash-auth__tab dash-auth__tab--active" data-auth-tab="login">Sign In</button>
+        <button type="button" class="dash-auth__tab" data-auth-tab="register">Register</button>
+      </div>
+      <div class="social-login">
+        <p class="social-login__label" data-i18n="social.continue">Continue with</p>
+        <div class="social-login__btns">
+          <button type="button" class="social-btn social-btn--google" data-social="Google">G Google</button>
+          <button type="button" class="social-btn social-btn--apple" data-social="Apple"> Apple</button>
+          <button type="button" class="social-btn social-btn--facebook" data-social="Facebook">f Facebook</button>
+        </div>
+      </div>
+      <form id="loginForm" class="dash-auth__panel">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required placeholder="you@email.com" />
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required placeholder="Your password" />
+        <p class="dash-error" id="loginError" hidden></p>
+        <button type="submit" class="dash-btn dash-btn--primary">Sign In</button>
       </form>
-      <a class="dashboard-login-back" href="index.html">← Back to home</a>
+      <form id="registerForm" class="dash-auth__panel" hidden>
+        <label for="regName">Full name</label>
+        <input type="text" id="regName" required placeholder="Your name" />
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" required placeholder="you@email.com" />
+        <label for="regPhone">Phone</label>
+        <input type="tel" id="regPhone" placeholder="+27 ..." />
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" required minlength="4" placeholder="Create a password" />
+        <p class="dash-error" id="registerError" hidden></p>
+        <button type="submit" class="dash-btn dash-btn--primary">Create Account</button>
+      </form>
+      <a href="index.html" class="dash-back">← Back to website</a>
     </div>
   </div>
 
-  <div id="dashboard-app">
-    <header class="site-header">
-      <a class="logo" href="index.html">
-        <img src="profile.png" alt="" class="logo-avatar" width="36" height="36" />
-        <span>Mthokozisi Nkambule</span>
+  <div id="dashboardApp" class="dash-app dash-screen--hidden" hidden>
+    <aside class="dash-sidebar">
+      <a href="index.html" class="dash-logo" aria-label="KMM Lifestyle Home">
+        <img src="assets/logo.png" alt="KMM Lifestyle" class="dash-logo__img" width="96" height="30" />
       </a>
-      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
-      <nav class="site-nav">
-        <a href="index.html" data-nav-page="home">Home</a>
-        <a href="about.html" data-nav-page="about">About Me</a>
-        <a href="posts.html" data-nav-page="posts">My Posts</a>
-        <a href="news.html" data-nav-page="news">News</a>
-        <a href="dashboard.html" data-nav-page="dashboard" class="is-active">Dashboard</a>
-        <a href="contact.html" data-nav-page="contact">Contact</a>
-        <button type="button" class="btn btn-secondary btn-sm" id="dashboard-logout">Sign out</button>
+      <nav class="dash-nav" id="dashNav">
+        <button type="button" class="dash-nav__item dash-nav__item--active" data-panel="bookings" data-i18n="dash.bookings">📅 My Bookings</button>
+        <button type="button" class="dash-nav__item" data-panel="favorites" data-i18n="dash.favorites">♥ Saved Favorites</button>
+        <button type="button" class="dash-nav__item" data-panel="profile" data-i18n="dash.profile">👤 Profile</button>
+        <button type="button" class="dash-nav__item" data-panel="invoices" data-i18n="dash.invoices">🧾 Invoices</button>
+        <button type="button" class="dash-nav__item" data-panel="subscribe" data-i18n="dash.subscribe">📬 Newsletter</button>
+        <button type="button" class="dash-nav__item" data-panel="loyalty" data-i18n="dash.loyalty">★ Loyalty Rewards</button>
+        <button type="button" class="dash-nav__item" data-panel="language" data-i18n="dash.language">🌐 Language</button>
+        <button type="button" class="dash-nav__item" data-panel="currency" data-i18n="dash.currency">💱 Currency</button>
+        <button type="button" class="dash-nav__item" data-panel="support" data-i18n="dash.support">💬 Support</button>
       </nav>
-    </header>
+      <p class="dash-sidebar__user" id="sidebarUserName">Guest</p>
+      <div class="dash-sidebar__footer">
+        <a href="rooms.html" class="dash-btn dash-btn--ghost dash-btn--block">Book a Stay</a>
+      </div>
+    </aside>
 
-    <main>
-      <section class="page-hero reveal">
-        <a class="page-back" href="posts.html">← View published posts</a>
-        <h1>Post Dashboard</h1>
-        <p class="page-hero-lead">Create, edit, and manage your website posts</p>
+    <div class="dash-main">
+      <header class="dash-topbar">
+        <h1 id="panelTitle">My Bookings</h1>
+        <div class="dash-topbar__actions">
+          <a href="index.html" class="dash-topbar__link">View website</a>
+          <button type="button" class="dash-btn dash-btn--ghost dash-btn--top" id="logoutBtn">Logout</button>
+        </div>
+      </header>
+
+      <section class="dash-panel dash-panel--active" id="panel-bookings">
+        <p class="dash-panel__lead">View and manage your reservations at KMM Lifestyle.</p>
+        <div id="bookingsList" class="dash-cards"></div>
       </section>
 
-      <section class="section dashboard-section reveal">
-        <div class="dashboard-grid">
-          <div class="dashboard-panel dashboard-panel--form">
-            <h2 id="form-heading">Compose a New Post</h2>
-            <p class="dashboard-hint">Complete the form below. Your post will appear on <a href="posts.html">My Posts</a> immediately in this browser.</p>
+      <section class="dash-panel" id="panel-favorites" hidden>
+        <p class="dash-panel__lead">Save packages you love and book them quickly later.</p>
+        <div id="favoritesList" class="dash-cards"></div>
+        <h2 class="dash-subtitle">Browse &amp; save</h2>
+        <div id="catalogList" class="dash-catalog"></div>
+      </section>
 
-            <form id="post-form" class="post-editor-form">
-              <label>
-                Publication date
-                <input type="date" name="date" required />
-              </label>
-              <label>
-                Post title
-                <input type="text" name="title" required placeholder="For example: Match day in Manzini" maxlength="120" />
-              </label>
-              <label>
-                Post content
-                <textarea name="body" rows="8" required placeholder="Write the full text of your post here…"></textarea>
-              </label>
-              <label>
-                Tags <span class="label-optional">(optional — separate with commas)</span>
-                <input type="text" name="tags" placeholder="Football, Life, Technology" />
-              </label>
-              <div class="dashboard-form-actions">
-                <button type="submit" class="btn btn-primary" id="post-submit">Publish post</button>
-                <button type="button" class="btn btn-secondary" id="post-cancel" hidden>Cancel editing</button>
-              </div>
-            </form>
-          </div>
+      <section class="dash-panel" id="panel-profile" hidden>
+        <p class="dash-panel__lead">Keep your contact details up to date.</p>
+        <form id="profileForm" class="dash-form">
+          <label for="profileName">Full name</label>
+          <input type="text" id="profileName" required />
+          <label for="profileEmail">Email</label>
+          <input type="email" id="profileEmail" disabled />
+          <label for="profilePhone">Phone / WhatsApp</label>
+          <input type="tel" id="profilePhone" />
+          <label for="profileAddress">Address <span class="optional">(optional)</span></label>
+          <textarea id="profileAddress" rows="2" placeholder="Street, city..."></textarea>
+          <button type="submit" class="dash-btn dash-btn--primary">Save Profile</button>
+          <p class="dash-success" id="profileSuccess" hidden>Profile updated successfully.</p>
+        </form>
+      </section>
 
-          <div class="dashboard-panel dashboard-panel--list">
-            <h2>Published Posts</h2>
-            <p class="dashboard-hint">Listed with the most recent first. Select <strong>Edit</strong> or <strong>Delete</strong> as required.</p>
-            <div id="dashboard-list" class="dashboard-list"></div>
-          </div>
-        </div>
+      <section class="dash-panel" id="panel-invoices" hidden>
+        <p class="dash-panel__lead">Download and review invoices for your bookings.</p>
+        <div id="invoicesList" class="dash-cards"></div>
+      </section>
 
-        <div class="dashboard-panel dashboard-panel--subscribers reveal">
-          <h2>Subscribers</h2>
-          <p class="dashboard-hint">All emails collected from the Subscribe button on this browser.</p>
-          <div id="subscribers-list" class="dashboard-list"></div>
-        </div>
+      <section class="dash-panel" id="panel-subscribe" hidden>
+        <p class="dash-panel__lead" data-i18n="dash.subscribe.lead">Get exclusive deals, property updates, and tour offers by email.</p>
+        <div id="subscribeContent"></div>
+      </section>
 
-        <div class="dashboard-tools reveal">
-          <h3>Share updates with all visitors</h3>
-          <p>
-            Posts saved here are visible immediately on <strong>this device</strong>.
-            For visitors on Facebook, other phones, or computers, download the updated
-            <code>posts.js</code> file and upload your website folder to Netlify again.
-          </p>
-          <div class="dashboard-tools-actions">
-            <button type="button" class="btn btn-primary" id="btn-export">Download posts.js</button>
-            <button type="button" class="btn btn-secondary" id="btn-reset">Restore original posts</button>
-          </div>
+      <section class="dash-panel" id="panel-loyalty" hidden>
+        <p class="dash-panel__lead">Earn points on every booking and unlock member discounts.</p>
+        <div id="loyaltyContent"></div>
+      </section>
+
+      <section class="dash-panel" id="panel-language" hidden>
+        <p class="dash-panel__lead" data-i18n="dash.lang.lead">Choose your preferred language for the dashboard and website.</p>
+        <div class="dash-settings-card">
+          <label for="langSelect" data-i18n="toolbar.lang">Language</label>
+          <select id="langSelect" class="dash-select" aria-label="Language">
+            <option value="en">English</option>
+            <option value="zu">isiZulu</option>
+            <option value="af">Afrikaans</option>
+            <option value="fr">Français</option>
+          </select>
         </div>
       </section>
-    </main>
 
-    <footer class="site-footer">
-      <p>© <span id="year"></span> Mthokozisi Luyanda Nkambule · <a href="index.html" style="color: inherit">Home</a></p>
-    </footer>
+      <section class="dash-panel" id="panel-currency" hidden>
+        <p class="dash-panel__lead" data-i18n="currency.title">Currency Converter</p>
+        <div class="dash-settings-card dash-converter">
+          <label for="currencyAmount" data-i18n="currency.amount">Amount in ZAR</label>
+          <input type="number" id="currencyAmount" class="dash-input" value="750" min="0" step="50" />
+          <label for="currencyTo">Convert to</label>
+          <select id="currencyTo" class="dash-select">
+            <option value="USD">USD — US Dollar</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="BWP">BWP — Botswana Pula</option>
+            <option value="NGN">NGN — Nigerian Naira</option>
+            <option value="ZAR">ZAR — South African Rand</option>
+          </select>
+          <p class="dash-converter__result" id="currencyResult">R750 = $40.50</p>
+        </div>
+      </section>
+
+      <section class="dash-panel" id="panel-support" hidden>
+        <p class="dash-panel__lead">Contact our team on WhatsApp or by phone for help with your bookings.</p>
+        <div class="dash-support-actions">
+          <a href="https://wa.me/27826226770?text=Hi%20KMM%20Lifestyle%2C%20I%20need%20support%20from%20my%20dashboard" class="dash-btn dash-btn--whatsapp" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a href="tel:+27826226770" class="dash-btn dash-btn--ghost">Call +27 82 622 6770</a>
+        </div>
+      </section>
+    </div>
   </div>
 
-  <div id="dashboard-toast" class="dashboard-toast" role="status" aria-live="polite"></div>
-
-  <script src="posts.js?v=2"></script>
-  <script src="posts-storage.js?v=2"></script>
-  <script src="script.js?v=2"></script>
-  <script src="dashboard.js?v=3"></script>
+  <link rel="stylesheet" href="features.css" />
+  <script src="api.js"></script>
+  <script src="client-store.js"></script>
+  <script src="bookings-store.js"></script>
+  <script src="i18n.js"></script>
+  <script src="site-features.js"></script>
+  <script src="dashboard.js"></script>
 </body>
 </html>

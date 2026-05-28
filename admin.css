@@ -1,0 +1,671 @@
+:root {
+  --bg: #0c0b0a;
+  --surface: #161412;
+  --surface-2: #1f1c19;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f5f0eb;
+  --muted: #a89f94;
+  --gold: #c9a962;
+  --gold-light: #e8d5a3;
+  --online: #6eb5ff;
+  --cash: #7dd87d;
+  --danger: #e88a8a;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+  --radius: 12px;
+  --page-pad: 2rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+a { color: var(--gold-light); text-decoration: none; }
+a:hover { color: var(--gold); }
+
+.admin-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  line-height: 1.2;
+  color: inherit;
+  text-decoration: none;
+}
+
+.admin-logo__img {
+  display: block;
+  height: auto;
+  max-width: 140px;
+  object-fit: contain;
+}
+
+.admin-logo__sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.admin-btn {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.admin-btn:hover { border-color: var(--gold); color: var(--gold-light); }
+
+.admin-btn--primary {
+  background: linear-gradient(135deg, var(--gold), #9a7b3c);
+  border-color: var(--gold);
+  color: var(--bg);
+  width: 100%;
+  padding: 0.875rem;
+}
+
+.admin-btn--ghost { background: transparent; }
+
+.admin-btn--danger {
+  border-color: rgba(232, 138, 138, 0.4);
+  color: var(--danger);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.admin-btn--danger:hover {
+  background: rgba(232, 138, 138, 0.15);
+}
+
+.admin-btn--danger.admin-btn--solid {
+  background: rgba(232, 138, 138, 0.15);
+  padding: 0.6rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+.admin-btn--danger.admin-btn--solid:hover {
+  background: rgba(232, 138, 138, 0.25);
+  border-color: var(--danger);
+  color: #ffb8b8;
+}
+
+.admin-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.admin-confirm[hidden] {
+  display: none;
+}
+
+.admin-confirm__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.admin-confirm__dialog {
+  position: relative;
+  width: min(100%, 420px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+}
+
+.admin-confirm__title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.admin-confirm__text {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.admin-confirm__details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.875rem;
+  padding: 1rem;
+  background: var(--surface-2);
+  border-radius: calc(var(--radius) - 4px);
+  margin-bottom: 1.5rem;
+}
+
+.admin-confirm__details dt {
+  color: var(--muted);
+}
+
+.admin-confirm__details dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.admin-confirm__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Screen visibility — do not rely on [hidden] alone (flex overrides in some cases) */
+.admin-screen--hidden {
+  display: none !important;
+}
+
+/* Login */
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.admin-login__card {
+  width: min(400px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem;
+}
+
+.admin-login__sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.admin-login__card label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.admin-login__card input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  margin-bottom: 1rem;
+}
+
+.admin-login__card input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.admin-login__hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.admin-login__hint code {
+  color: var(--gold-light);
+  font-family: monospace;
+}
+
+.admin-login__error {
+  font-size: 0.85rem;
+  color: var(--danger);
+  margin-bottom: 1rem;
+}
+
+.admin-back {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Dashboard */
+.admin-app { min-height: 100vh; }
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.25rem var(--page-pad);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-main {
+  padding: 2rem var(--page-pad);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.stat-card__label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.stat-card__value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+.stat-card--online .stat-card__value { color: var(--online); }
+.stat-card--cash .stat-card__value { color: var(--cash); }
+.stat-card--invoices .stat-card__value { color: #d4b896; }
+.stat-card--revenue .stat-card__value { color: var(--cash); }
+.stat-card--subscriptions .stat-card__value { color: #9ec5ff; }
+
+.stat-card__meta {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.admin-section {
+  margin-top: 2.5rem;
+}
+
+.admin-section__head {
+  margin-bottom: 1rem;
+}
+
+.admin-section__title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.admin-section__sub {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.admin-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  color: var(--gold-light);
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-search { flex: 1; min-width: 220px; }
+
+.admin-search input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+.admin-search input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.admin-filters {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.admin-filters select {
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.admin-table th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  font-weight: 600;
+  background: var(--surface-2);
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-table__guest strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+
+.admin-table__guest span,
+.admin-table__contact {
+  color: var(--muted);
+  font-size: 0.8rem;
+  display: block;
+}
+
+.admin-table__contact a {
+  color: var(--gold-light);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge--online {
+  background: rgba(110, 181, 255, 0.15);
+  color: var(--online);
+}
+
+.badge--cash {
+  background: rgba(125, 216, 125, 0.15);
+  color: var(--cash);
+}
+
+.badge--event {
+  background: rgba(201, 169, 98, 0.15);
+  color: var(--gold-light);
+  margin: 0.15rem 0.15rem 0.15rem 0;
+  display: inline-block;
+}
+
+.badge--invoice-pending {
+  background: rgba(201, 169, 98, 0.15);
+  color: var(--gold-light);
+}
+
+.badge--invoice-paid {
+  background: rgba(125, 216, 125, 0.15);
+  color: var(--cash);
+}
+
+.badge--invoice-pay-on-arrival {
+  background: rgba(110, 181, 255, 0.15);
+  color: var(--online);
+}
+
+.admin-table__events {
+  max-width: 180px;
+  line-height: 1.6;
+}
+
+.admin-table__empty td {
+  text-align: center;
+  color: var(--muted);
+  padding: 3rem;
+}
+
+.admin-table__notes {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.35rem;
+  max-width: 200px;
+}
+
+.admin-note {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  :root { --page-pad: 1rem; }
+  .admin-stats { grid-template-columns: repeat(2, 1fr); }
+  .admin-header { padding-top: 1rem; padding-bottom: 1rem; }
+  .admin-main { padding-top: 1rem; padding-bottom: 1rem; }
+}
+
+@media (max-width: 600px) {
+  .admin-stats { grid-template-columns: 1fr; }
+  .admin-toolbar { flex-direction: column; }
+  .admin-filters { flex-direction: column; }
+  .admin-header__actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .admin-header__actions .admin-btn {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+  }
+
+  .admin-table-wrap {
+    overflow: visible;
+    background: transparent;
+    border: 0;
+  }
+
+  .admin-table {
+    border-collapse: separate;
+    border-spacing: 0 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table tbody tr {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.35rem 0.9rem;
+  }
+
+  .admin-table tbody td {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 0.6rem;
+    align-items: start;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    word-break: break-word;
+  }
+
+  .admin-table tbody td::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 600;
+  }
+
+  .admin-table tbody td:last-child {
+    border-bottom: 0;
+  }
+
+  .admin-table td.admin-table__guest strong {
+    margin-bottom: 0.25rem;
+  }
+
+  .admin-table__events {
+    max-width: none;
+  }
+
+  .admin-table__notes {
+    max-width: none;
+  }
+
+  .admin-table__empty td {
+    display: block;
+    text-align: left;
+    padding: 0.9rem 0;
+    border: 0;
+  }
+
+  .admin-table__empty td::before {
+    content: none;
+  }
+
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(1)::before { content: "Date"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(2)::before { content: "Guest"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(3)::before { content: "Contact"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(4)::before { content: "Package"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(5)::before { content: "Event"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(6)::before { content: "Payment"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(7)::before { content: "Stay"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(8)::before { content: "Guests"; }
+  #bookingsTable tbody tr:not(.admin-table__empty) td:nth-child(9)::before { content: "Action"; }
+
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(1)::before { content: "Date"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(2)::before { content: "Invoice"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(3)::before { content: "Guest"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(4)::before { content: "Package"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(5)::before { content: "Amount"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(6)::before { content: "Payment"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(7)::before { content: "Status"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(8)::before { content: "Booking"; }
+  #invoicesTable tbody tr:not(.admin-table__empty) td:nth-child(9)::before { content: "Action"; }
+
+  #subscriptionsTable tbody tr:not(.admin-table__empty) td:nth-child(1)::before { content: "Date"; }
+  #subscriptionsTable tbody tr:not(.admin-table__empty) td:nth-child(2)::before { content: "Name"; }
+  #subscriptionsTable tbody tr:not(.admin-table__empty) td:nth-child(3)::before { content: "Email"; }
+  #subscriptionsTable tbody tr:not(.admin-table__empty) td:nth-child(4)::before { content: "Interests"; }
+  #subscriptionsTable tbody tr:not(.admin-table__empty) td:nth-child(5)::before { content: "Action"; }
+}
+
+@media (max-width: 420px) {
+  :root { --page-pad: 0.75rem; }
+  .admin-main {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .admin-section {
+    margin-top: 1.5rem;
+  }
+
+  .admin-section__title {
+    font-size: 1.45rem;
+  }
+
+  .admin-table {
+    border-spacing: 0 0.55rem;
+    font-size: 0.78rem;
+  }
+
+  .admin-table tbody tr {
+    padding: 0.25rem 0.7rem;
+  }
+
+  .admin-table tbody td {
+    grid-template-columns: 82px 1fr;
+    gap: 0.45rem;
+    padding: 0.4rem 0;
+  }
+
+  .admin-table tbody td::before {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+
+  .admin-btn--danger {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.7rem;
+  }
+
+  .badge {
+    font-size: 0.64rem;
+    padding: 0.2rem 0.52rem;
+  }
+
+  .admin-table__guest span,
+  .admin-table__contact,
+  .admin-table__notes {
+    font-size: 0.72rem;
+  }
+}

@@ -1,0 +1,203 @@
+/* Site features: toolbar, live chat, currency */
+
+.header__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.header__select {
+  padding: 0.45rem 0.6rem;
+  font-size: 0.75rem;
+  font-family: var(--font-body);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.header__tool {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.header__tool:hover,
+.header__tool--active {
+  border-color: var(--color-gold);
+  background: rgba(201, 169, 98, 0.12);
+}
+
+/* Currency panel */
+.currency-panel {
+  position: fixed;
+  top: var(--header-h);
+  right: 1rem;
+  z-index: 1001;
+  width: min(300px, calc(100vw - 2rem));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: var(--transition);
+}
+
+.currency-panel--open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.currency-panel h4 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 1rem;
+  color: var(--color-gold-light);
+}
+
+.currency-panel label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-bottom: 0.35rem;
+}
+
+.currency-panel input,
+.currency-panel select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.75rem;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.currency-panel__result {
+  padding: 0.75rem;
+  background: rgba(201, 169, 98, 0.1);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  color: var(--color-gold-light);
+  text-align: center;
+}
+
+.currency-panel__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+/* Social login */
+.social-login {
+  margin: 1.25rem 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.social-login__label {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin-bottom: 0.75rem;
+}
+
+.social-login__btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.social-btn:hover {
+  border-color: var(--color-gold);
+}
+
+.social-btn--google { border-color: rgba(234, 67, 53, 0.4); }
+.social-btn--apple { border-color: rgba(255, 255, 255, 0.2); }
+.social-btn--facebook { border-color: rgba(24, 119, 242, 0.4); }
+
+/* Loyalty card */
+.loyalty-card {
+  background: linear-gradient(135deg, var(--color-surface) 0%, rgba(201, 169, 98, 0.15) 100%);
+  border: 1px solid var(--color-gold-dark);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.loyalty-card__points {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--color-gold-light);
+  line-height: 1;
+}
+
+.loyalty-card__tier {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--color-gold);
+  color: var(--color-bg);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.loyalty-progress {
+  margin-top: 1.25rem;
+  height: 8px;
+  background: var(--color-surface-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.loyalty-progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-gold-dark), var(--color-gold-light));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+@media (max-width: 1024px) {
+  .header__toolbar { display: none; }
+  .header__inner { gap: 0.75rem; }
+}
+

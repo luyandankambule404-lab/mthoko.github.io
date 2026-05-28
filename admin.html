@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KMM Lifestyle | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+</head>
+<body>
+  <div class="admin-login" id="loginScreen">
+    <div class="admin-login__card">
+      <a href="index.html" class="admin-logo" title="Back to website">
+        <img src="assets/logo.png" alt="KMM Lifestyle" class="admin-logo__img" width="140" height="44" />
+        <span class="admin-logo__sub">Admin Dashboard</span>
+      </a>
+      <p class="admin-login__sub">Sign in to view bookings and guest details.</p>
+      <form id="loginForm">
+        <label for="adminPassword">Password</label>
+        <input type="password" id="adminPassword" required placeholder="Enter admin password" autocomplete="current-password" />
+        <p class="admin-login__hint">Default password: <code>kmmadmin2025</code></p>
+        <p class="admin-login__error" id="loginError" hidden>Incorrect password. Try again.</p>
+        <p class="admin-login__error" id="loginLoadError" hidden>Admin failed to load. Refresh the page or use a local server (not file://).</p>
+        <button type="submit" class="admin-btn admin-btn--primary">Sign In</button>
+      </form>
+      <a href="index.html" class="admin-back">← Back to website</a>
+    </div>
+  </div>
+
+  <div class="admin-app admin-screen--hidden" id="dashboard">
+    <header class="admin-header">
+      <div class="admin-header__left">
+        <a href="index.html" class="admin-logo" title="Back to website">
+          <img src="assets/logo.png" alt="KMM Lifestyle" class="admin-logo__img" width="120" height="38" />
+        </a>
+      </div>
+      <div class="admin-header__actions">
+        <button type="button" class="admin-btn admin-btn--ghost" id="refreshBtn">Refresh</button>
+        <button type="button" class="admin-btn admin-btn--ghost" id="exportBtn">Export CSV</button>
+        <button type="button" class="admin-btn admin-btn--ghost" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section class="admin-stats" id="statsGrid">
+        <article class="stat-card">
+          <span class="stat-card__label">Total Bookings</span>
+          <span class="stat-card__value" id="statTotal">0</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Today</span>
+          <span class="stat-card__value" id="statToday">0</span>
+        </article>
+        <article class="stat-card stat-card--online">
+          <span class="stat-card__label">Book Online</span>
+          <span class="stat-card__value" id="statOnline">0</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Pay Cash</span>
+          <span class="stat-card__value" id="statCash">0</span>
+        </article>
+        <article class="stat-card stat-card--invoices">
+          <span class="stat-card__label">Invoices</span>
+          <span class="stat-card__value" id="statInvoices">0</span>
+        </article>
+        <article class="stat-card stat-card--revenue">
+          <span class="stat-card__label">Total Paid</span>
+          <span class="stat-card__value" id="statTotalPaid">R0</span>
+          <span class="stat-card__meta" id="statTotalInvoiced">R0 invoiced</span>
+        </article>
+        <article class="stat-card stat-card--subscriptions">
+          <span class="stat-card__label">Subscribers</span>
+          <span class="stat-card__value" id="statSubscriptions">0</span>
+        </article>
+      </section>
+
+      <section class="admin-toolbar">
+        <div class="admin-search">
+          <input type="search" id="searchInput" placeholder="Search by name, email, phone, package..." />
+        </div>
+        <div class="admin-filters">
+          <select id="filterPayment">
+            <option value="">All payments</option>
+            <option value="online">Online only</option>
+            <option value="cash">Cash only</option>
+          </select>
+          <select id="filterPackage">
+            <option value="">All packages</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="admin-table-wrap">
+        <table class="admin-table" id="bookingsTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Guest</th>
+              <th>Contact</th>
+              <th>Package</th>
+              <th>Event</th>
+              <th>Payment</th>
+              <th>Stay</th>
+              <th>Guests</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="bookingsBody">
+            <tr class="admin-table__empty">
+              <td colspan="9">No bookings yet. Bookings from the website will appear here.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="admin-section">
+        <div class="admin-section__head">
+          <h2 class="admin-section__title">Invoices</h2>
+          <p class="admin-section__sub" id="invoiceSummary">Invoices created for signed-in guest bookings.</p>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="invoicesTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Invoice</th>
+                <th>Guest</th>
+                <th>Package</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Booking</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="invoicesBody">
+              <tr class="admin-table__empty">
+                <td colspan="9">No invoices yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section">
+        <div class="admin-section__head">
+          <h2 class="admin-section__title">Newsletter Subscribers</h2>
+          <p class="admin-section__sub">All email subscriptions from the website and client dashboard.</p>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="subscriptionsTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Interests</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="subscriptionsBody">
+              <tr class="admin-table__empty">
+                <td colspan="5">No subscribers yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="admin-note" id="adminDbNote">Loading database info…</p>
+    </main>
+  </div>
+
+  <div class="admin-confirm" id="deleteConfirm" hidden aria-hidden="true" role="dialog" aria-labelledby="deleteConfirmTitle">
+    <div class="admin-confirm__overlay" data-confirm-cancel></div>
+    <div class="admin-confirm__dialog">
+      <h2 class="admin-confirm__title" id="deleteConfirmTitle">Delete booking?</h2>
+      <p class="admin-confirm__text" id="deleteConfirmText">This action cannot be undone. The booking record will be permanently removed.</p>
+      <dl class="admin-confirm__details" id="deleteConfirmDetails"></dl>
+      <div class="admin-confirm__actions">
+        <button type="button" class="admin-btn admin-btn--ghost" data-confirm-cancel>Cancel</button>
+        <button type="button" class="admin-btn admin-btn--danger admin-btn--solid" id="deleteConfirmBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="bookings-store.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

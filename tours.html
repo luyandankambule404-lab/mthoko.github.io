@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="KMM Lifestyle tour packages — safari adventures and ultimate South African experiences." />
+  <title>KMM Lifestyle | Tours</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="tours">
+  <div id="site-header"></div>
+  <main class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <span class="section__tag">Explore With Us</span>
+        <h1>KMM Lifestyle <em>Tours</em></h1>
+        <p>Experience thrilling adventures with exclusive tour packages across South Africa.</p>
+      </div>
+    </section>
+    <section class="tours section">
+      <div class="container">
+        <div class="tours__grid">
+          <article class="tour-card">
+            <div class="tour-card__image">
+              <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80" alt="Safari adventure" loading="lazy" />
+            </div>
+            <div class="tour-card__body">
+              <h3>3-Day Safari Adventure</h3>
+              <p class="tour-card__meta"><strong>R3700/night</strong> · 3 Days</p>
+              <ul>
+                <li>Luxury accommodation</li>
+                <li>Game drive</li>
+                <li>Water park visit</li>
+                <li>Fun games</li>
+              </ul>
+              <button type="button" class="btn btn--primary js-book-open" data-package="3-Day Safari Adventure" data-price="R199/night · 3 Days">Book Now</button>
+            </div>
+          </article>
+          <article class="tour-card">
+            <div class="tour-card__image">
+              <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80" alt="Ultimate South African experience" loading="lazy" />
+            </div>
+            <div class="tour-card__body">
+              <h3>7-Day Ultimate Experience</h3>
+              <p class="tour-card__meta"><strong>R5000/night</strong> · 7 Days</p>
+              <ul>
+                <li>Game drive</li>
+                <li>Lions park visit</li>
+                <li>Boat ride</li>
+                <li>Water park visit</li>
+                <li>Local mall visit</li>
+              </ul>
+              <button type="button" class="btn btn--primary js-book-open" data-package="7-Day Ultimate Experience" data-price="R189/night · 7 Days">Book Now</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <div id="site-extras"></div>
+  <script src="api.js"></script>
+  <script src="client-store.js"></script>
+  <script src="bookings-store.js"></script>
+  <script src="i18n.js"></script>
+  <script src="layout.js"></script>
+  <script src="site-features.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

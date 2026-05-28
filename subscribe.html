@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Subscribe to KMM Lifestyle for exclusive deals, property updates, and tour package offers." />
+  <title>KMM Lifestyle | Subscribe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="subscribe">
+  <div id="site-header"></div>
+  <main class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <span class="section__tag">Stay Updated</span>
+        <h1>Subscribe to <em>KMM Lifestyle</em></h1>
+        <p>Get exclusive deals, new property updates, tour packages, and tips for first-time renters.</p>
+      </div>
+    </section>
+    <section class="subscribe section">
+      <div class="container subscribe__inner">
+        <div class="subscribe__content reveal">
+          <p class="subscribe__lead">Get exclusive deals, new property updates, tour packages, and tips for first-time renters — straight to your inbox.</p>
+          <ul class="subscribe__perks">
+            <li>Early access to weekly &amp; monthly specials</li>
+            <li>New property spotlights &amp; availability alerts</li>
+            <li>Safari tour launches and limited offers</li>
+          </ul>
+        </div>
+        <div class="subscribe__form-wrap reveal">
+          <form class="subscribe__form" id="subscribeForm" novalidate>
+            <div class="form-row">
+              <label for="subscribeName">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="subscribeName" name="name" placeholder="Your name" autocomplete="name" />
+            </div>
+            <div class="form-row">
+              <label for="subscribeEmail">Email address</label>
+              <input type="email" id="subscribeEmail" name="email" required placeholder="you@email.com" autocomplete="email" />
+            </div>
+            <fieldset class="subscribe__interests">
+              <legend>I'm interested in</legend>
+              <label class="subscribe__check">
+                <input type="checkbox" name="interest" value="rooms" checked />
+                <span>Rooms &amp; accommodation</span>
+              </label>
+              <label class="subscribe__check">
+                <input type="checkbox" name="interest" value="tours" />
+                <span>Tours &amp; events</span>
+              </label>
+              <label class="subscribe__check">
+                <input type="checkbox" name="interest" value="deals" checked />
+                <span>Exclusive deals</span>
+              </label>
+            </fieldset>
+            <label class="subscribe__consent">
+              <input type="checkbox" id="subscribeConsent" required />
+              <span>I agree to receive updates from KMM Lifestyle. Unsubscribe anytime.</span>
+            </label>
+            <button type="submit" class="btn btn--primary btn--block" id="subscribeBtn">Subscribe Now</button>
+            <p class="subscribe__error" id="subscribeError" role="alert" hidden></p>
+          </form>
+          <div class="subscribe__success" id="subscribeSuccess" hidden>
+            <div class="subscribe__success-icon" aria-hidden="true">✓</div>
+            <h3>You're subscribed!</h3>
+            <p>Thank you for joining KMM Lifestyle. Watch your inbox for exclusive updates and offers.</p>
+            <button type="button" class="btn btn--ghost" id="subscribeAgain">Subscribe another email</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <div id="site-extras"></div>
+  <script src="api.js"></script>
+  <script src="client-store.js"></script>
+  <script src="bookings-store.js"></script>
+  <script src="i18n.js"></script>
+  <script src="layout.js"></script>
+  <script src="site-features.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

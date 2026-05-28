@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Photo gallery of KMM Lifestyle — luxury rooms, living spaces, and premium accommodation in Vanderbijlpark." />
+  <title>KMM Lifestyle | Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="gallery">
+  <div id="site-header"></div>
+  <main class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <span class="section__tag">Our Moments</span>
+        <h1>KMM Lifestyle <em>Photos</em></h1>
+        <p>A glimpse into the luxury, comfort, and style that define every stay with us.</p>
+      </div>
+    </section>
+    <section class="gallery section">
+      <div class="container">
+        <div class="gallery__grid">
+          <figure class="gallery__item gallery__item--wide"><button type="button" class="gallery__trigger" aria-label="View Luxury bedroom"><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=900&q=80" alt="Luxury bedroom" loading="lazy" /></button></figure>
+          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Modern living space"><img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80" alt="Modern living space" loading="lazy" /></button></figure>
+          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Apartment interior"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80" alt="Apartment interior" loading="lazy" /></button></figure>
+          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Comfortable lounge"><img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80" alt="Comfortable lounge" loading="lazy" /></button></figure>
+          <figure class="gallery__item gallery__item--tall"><button type="button" class="gallery__trigger" aria-label="View Hotel suite"><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=80" alt="Hotel suite" loading="lazy" /></button></figure>
+          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Kitchen area"><img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600&q=80" alt="Kitchen area" loading="lazy" /></button></figure>
+          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Premium room"><img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80" alt="Premium room" loading="lazy" /></button></figure>
+          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Bathroom amenities"><img src="https://images.unsplash.com/photo-1564540583246-934409427776?w=600&q=80" alt="Bathroom amenities" loading="lazy" /></button></figure>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="gallery-lightbox" id="galleryLightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="galleryLightboxCaption">
+    <div class="gallery-lightbox__overlay" data-gallery-close></div>
+    <button type="button" class="gallery-lightbox__close" data-gallery-close aria-label="Close photo">&times;</button>
+    <button type="button" class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="galleryPrev" aria-label="Previous photo">&#8249;</button>
+    <div class="gallery-lightbox__stage">
+      <img id="galleryLightboxImg" alt="" />
+      <p class="gallery-lightbox__caption" id="galleryLightboxCaption"></p>
+    </div>
+    <button type="button" class="gallery-lightbox__nav gallery-lightbox__nav--next" id="galleryNext" aria-label="Next photo">&#8250;</button>
+  </div>
+  <div id="site-footer"></div>
+  <div id="site-extras"></div>
+  <script src="api.js"></script>
+  <script src="client-store.js"></script>
+  <script src="bookings-store.js"></script>
+  <script src="i18n.js"></script>
+  <script src="layout.js"></script>
+  <script src="site-features.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

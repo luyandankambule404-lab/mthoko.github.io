@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Rooms and services at KMM Lifestyle — luxury stays, shared units, weekly packages, and monthly rentals in Vanderbijlpark." />
+  <title>KMM Lifestyle | Rooms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="rooms">
+  <div id="site-header"></div>
+  <main class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <span class="section__tag">Our Rooms</span>
+        <h1>Rooms &amp; <em>Services</em></h1>
+        <p>A seamless blend of luxury, comfort, and exclusivity with premium amenities and breathtaking aesthetics.</p>
+      </div>
+    </section>
+    <section class="page-stats section">
+      <div class="container">
+        <div class="hero__stats hero__stats--page">
+          <div class="stat">
+            <span class="stat__num">18</span>
+            <span class="stat__label">Units Available</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num">R750</span>
+            <span class="stat__label">From / Night</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num">24/7</span>
+            <span class="stat__label">Support</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="rooms section">
+      <div class="container">
+        <div class="rooms__grid">
+          <article class="room-card">
+            <div class="room-card__top">
+              <span class="room-card__type">Luxury Stay</span>
+              <span class="room-card__price">R750<small>/night</small></span>
+            </div>
+            <h3>Standard Night Stay</h3>
+            <p class="room-card__sub">Ideal for solo or couple travelers.</p>
+            <ul class="room-card__features">
+              <li>Fully Furnished Unit</li>
+              <li>Secure Parking</li>
+              <li>Peaceful Environment</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Standard Night Stay" data-price="R750/night">Book Now</button>
+          </article>
+          <article class="room-card room-card--featured">
+            <span class="room-card__badge">Popular</span>
+            <div class="room-card__top">
+              <span class="room-card__type">Shared Stay</span>
+              <span class="room-card__price">R1400<small>/night</small></span>
+            </div>
+            <h3>Shared Unit Stay</h3>
+            <p class="room-card__sub">Great for friends or work teams.</p>
+            <ul class="room-card__features">
+              <li>2 Beds Per Unit</li>
+              <li>Communal Kitchen Access</li>
+              <li>Weekly Cleaning Service</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Shared Unit Stay" data-price="R1400/night">Reserve Now</button>
+          </article>
+          <article class="room-card">
+            <div class="room-card__top">
+              <span class="room-card__type">Weekly Package</span>
+              <span class="room-card__price">Pay Weekly</span>
+            </div>
+            <h3>Weekly Stay Package</h3>
+            <p class="room-card__sub">Hassle-free extended stays.</p>
+            <ul class="room-card__features">
+              <li>Discounted Weekly Rates</li>
+              <li>Priority Booking</li>
+              <li>Laundry Service Available</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Weekly Stay Package" data-price="Pay Weekly">Book Weekly</button>
+          </article>
+          <article class="room-card">
+            <div class="room-card__top">
+              <span class="room-card__type">Monthly Package</span>
+              <span class="room-card__price">R8000<small>/month</small></span>
+            </div>
+            <h3>Monthly Rental Package</h3>
+            <p class="room-card__sub">Exclusive deal for bulk stays.</p>
+            <ul class="room-card__features">
+              <li>Private &amp; Secure Units</li>
+              <li>Access to All Facilities</li>
+              <li>Long-term Convenience</li>
+            </ul>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Monthly Rental Package" data-price="R8000/month">Book Monthly</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <div id="site-extras"></div>
+  <script src="api.js"></script>
+  <script src="client-store.js"></script>
+  <script src="bookings-store.js"></script>
+  <script src="i18n.js"></script>
+  <script src="layout.js"></script>
+  <script src="site-features.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
