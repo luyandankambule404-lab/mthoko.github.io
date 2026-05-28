@@ -2,14 +2,32 @@
 (function () {
   const page = document.body.dataset.page || "home";
   const WHATSAPP_PAGES = new Set(["contact"]);
-  const LOGO_SRC = "assets/logo.png";
+  const logoSrc = () =>
+    typeof KmmPaths !== "undefined" ? KmmPaths.logoUrl() : "assets/logo.png";
+  const logoFallbacks = () =>
+    typeof KmmPaths !== "undefined"
+      ? KmmPaths.logoCandidates()
+      : ["assets/logo.png", "images/logo.png", "profile.png"];
 
   if (!document.querySelector('link[rel="icon"]')) {
     const favicon = document.createElement("link");
     favicon.rel = "icon";
     favicon.type = "image/png";
-    favicon.href = LOGO_SRC;
+    favicon.href = logoSrc();
     document.head.appendChild(favicon);
+  }
+
+  function bindLogoFallback(img) {
+    const candidates = logoFallbacks();
+    let index = 0;
+    img.onerror = function () {
+      index += 1;
+      if (index < candidates.length) {
+        this.src = candidates[index];
+      } else {
+        this.onerror = null;
+      }
+    };
   }
 
   const navItems = [
@@ -42,7 +60,7 @@
   <header class="header" id="header">
     <div class="container header__inner">
       <a href="index.html" class="logo" aria-label="KMM Lifestyle Home">
-        <img src="${LOGO_SRC}" alt="KMM Lifestyle" class="logo__img" width="150" height="48" />
+        <img src="${logoSrc()}" alt="KMM Lifestyle" class="logo__img" width="150" height="48" />
       </a>
       <nav class="nav" id="nav" aria-label="Main navigation">${navHtml}</nav>
       <div class="header__actions">
@@ -61,7 +79,7 @@
     <div class="container footer__grid">
       <div class="footer__brand">
         <a href="index.html" class="logo" aria-label="KMM Lifestyle Home">
-          <img src="${LOGO_SRC}" alt="KMM Lifestyle" class="logo__img logo__img--footer" width="130" height="42" />
+          <img src="${logoSrc()}" alt="KMM Lifestyle" class="logo__img logo__img--footer" width="130" height="42" />
         </a>
         <p>Premium accommodation solutions with comfortable single and shared units. Tenant satisfaction is our priority.</p>
         <form class="footer__subscribe" id="footerSubscribe" aria-label="Quick newsletter signup">
@@ -179,6 +197,8 @@
   if (headerEl) headerEl.innerHTML = headerHtml;
   if (footerEl) footerEl.innerHTML = footerHtml;
   if (extrasEl) extrasEl.innerHTML = extrasHtml;
+
+  document.querySelectorAll(".logo__img").forEach(bindLogoFallback);
 
   if (typeof KmmI18n !== "undefined") {
     KmmI18n.apply();

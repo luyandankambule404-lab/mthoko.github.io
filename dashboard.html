@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="KMM Lifestyle client dashboard — manage bookings, favorites, profile, invoices, and support." />
   <title>KMM Lifestyle | My Dashboard</title>
-  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="icon" type="image/png" href="assets/logo.png" data-kmm-logo />
+  <script src="site-paths.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -15,7 +16,7 @@
   <div id="authScreen" class="dash-auth">
     <div class="dash-auth__card">
       <a href="index.html" class="dash-logo" aria-label="KMM Lifestyle Home">
-        <img src="assets/logo.png" alt="KMM Lifestyle" class="dash-logo__img" width="140" height="44" />
+        <img src="assets/logo.png" alt="KMM Lifestyle" class="dash-logo__img" data-kmm-logo width="140" height="44" />
         <span class="dash-logo__sub">Client Dashboard</span>
       </a>
       <p class="dash-auth__sub">Sign in or create an account to manage your stays.</p>
@@ -58,7 +59,7 @@
   <div id="dashboardApp" class="dash-app dash-screen--hidden" hidden>
     <aside class="dash-sidebar">
       <a href="index.html" class="dash-logo" aria-label="KMM Lifestyle Home">
-        <img src="assets/logo.png" alt="KMM Lifestyle" class="dash-logo__img" width="96" height="30" />
+        <img src="assets/logo.png" alt="KMM Lifestyle" class="dash-logo__img" data-kmm-logo width="96" height="30" />
       </a>
       <nav class="dash-nav" id="dashNav">
         <button type="button" class="dash-nav__item dash-nav__item--active" data-panel="bookings" data-i18n="dash.bookings">📅 My Bookings</button>
