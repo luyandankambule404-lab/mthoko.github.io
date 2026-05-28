@@ -1,24 +1,31 @@
 @echo off
-title Website - local server
+title KMM Lifestyle - local server
 cd /d "%~dp0"
 
 echo.
-echo  Starting your website at http://127.0.0.1:8080/
-echo  Your browser should open in a moment.
+echo  Starting KMM Lifestyle (website + sign-in API) at http://localhost:3000
+echo  Your browser will open in a moment.
 echo.
-echo  To stop the server: close this window or press Ctrl+C
+echo  Sign in / bookings / admin only work on this address — not the GitHub link.
+echo  To stop: close this window or press Ctrl+C
 echo.
 
-where python >nul 2>&1
-if errorlevel 1 goto :no_python
+where node >nul 2>&1
+if errorlevel 1 (
+  echo  Node.js is not installed. Install from https://nodejs.org then run this again.
+  pause
+  exit /b 1
+)
 
-start "" cmd /c "timeout /t 2 /nobreak >nul & start http://127.0.0.1:8080/"
-python -m http.server 8080
-exit /b 0
+if not exist "server\node_modules" (
+  echo  Installing server dependencies (first time only)...
+  call npm run install:server
+  if errorlevel 1 (
+    echo  Install failed. Try: cd server ^&^& npm install
+    pause
+    exit /b 1
+  )
+)
 
-:no_python
-echo  Python not found — trying Edge or Chrome instead...
-call "%~dp0OPEN-IN-BROWSER.bat"
-echo.
-pause
-exit /b 1
+start "" cmd /c "timeout /t 3 /nobreak >nul & start http://localhost:3000/"
+call npm start

@@ -510,6 +510,9 @@
   });
 
   (async function init() {
+    if (window.location.hostname.endsWith("github.io")) {
+      document.getElementById("githubHostingNote")?.removeAttribute("hidden");
+    }
     await KmmClient.ready();
     if (KmmClient.isLoggedIn()) await showDashboard();
     else showAuth();

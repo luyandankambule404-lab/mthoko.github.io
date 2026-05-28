@@ -119,6 +119,22 @@ body {
   margin: 1rem 0 1.5rem;
 }
 
+.dash-auth__hosting {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--gold-light);
+  background: rgba(201, 169, 98, 0.12);
+  border: 1px solid rgba(201, 169, 98, 0.35);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.dash-auth__hosting a {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
 .dash-auth__tabs {
   display: flex;
   gap: 0.5rem;
