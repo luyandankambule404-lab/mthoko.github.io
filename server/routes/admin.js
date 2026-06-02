@@ -1,6 +1,7 @@
 const express = require("express");
 const { signToken, requireAdmin } = require("../middleware");
-const { db } = require("../db");
+const { db, parseBooking } = require("../db");
+const bookingEmails = require("../lib/booking-emails");
 
 const router = express.Router();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "kmmadmin2025";
@@ -64,6 +65,17 @@ router.patch("/invoices/:id", requireAdmin, (req, res) => {
   const result = db.prepare("UPDATE invoices SET status = ? WHERE id = ?").run(status, req.params.id);
   if (result.changes === 0) return res.status(404).json({ error: "Invoice not found." });
   const row = db.prepare("SELECT * FROM invoices WHERE id = ?").get(req.params.id);
+
+  if (status === "paid" && row.payment === "online" && row.booking_id) {
+    const bookingRow = db.prepare("SELECT * FROM bookings WHERE id = ?").get(row.booking_id);
+    if (bookingRow) {
+      bookingEmails.handlePaymentReceived(parseBooking(bookingRow), {
+        amount: row.amount,
+        paymentReference: row.id,
+      });
+    }
+  }
+
   res.json({
     ok: true,
     invoice: {

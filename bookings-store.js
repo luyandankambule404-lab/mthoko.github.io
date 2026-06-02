@@ -48,6 +48,8 @@ const KmmBookings = (function () {
       eventTypes: data.eventTypes || [],
       userId: data.userId || "",
       status: data.status || "confirmed",
+      roomId: data.roomId || "",
+      totalAmount: data.totalAmount,
     };
 
     if (!_useApi) {

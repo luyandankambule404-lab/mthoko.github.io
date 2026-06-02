@@ -1,42 +1,12 @@
 const express = require("express");
 const crypto = require("crypto");
-const database = require("../lib/database");
-const paymentService = require("../lib/payment-service");
-const bookingService = require("../lib/booking-service");
+const paymentCore = require("../lib/payments-core");
 const { requireClient, optionalClient, requireAdmin } = require("../middleware");
 
 const router = express.Router();
 
-router.get("/mine", requireClient, async (req, res) => {
-  try {
-    const payments = await paymentService.listPaymentsForUser(database, req.userId);
-    res.json({ payments });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Could not load payments." });
-  }
-});
-
-router.get("/booking/:bookingId", requireClient, async (req, res) => {
-  try {
-    const booking = await bookingService.getBookingById(database, req.params.bookingId);
-    if (!booking) return res.status(404).json({ error: "Booking not found." });
-    if (booking.userId && booking.userId !== req.userId) {
-      const user = await database.get("SELECT email FROM users WHERE id = ?", [req.userId]);
-      if (!user?.email || booking.email?.toLowerCase() !== user.email.toLowerCase()) {
-        return res.status(403).json({ error: "Not allowed." });
-      }
-    }
-    const payments = await paymentService.getPaymentsForBooking(database, req.params.bookingId);
-    res.json({ payments });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Could not load payments." });
-  }
-});
-
 router.get("/config", (_req, res) => {
-  res.json({ ok: true, ...paymentService.getPaymentConfig() });
+  res.json({ ok: true, ...paymentCore.getPaymentConfig() });
 });
 
 router.post("/initiate", optionalClient, async (req, res) => {
@@ -47,19 +17,23 @@ router.post("/initiate", optionalClient, async (req, res) => {
 
     let id = bookingId;
     if (!id && bookingReference) {
-      const booking = await bookingService.getBookingByReference(database, bookingReference);
+      const { db, parseBooking } = require("../db");
+      const row = db
+        .prepare("SELECT * FROM bookings WHERE id = ? OR booking_reference = ?")
+        .get(bookingReference, bookingReference);
+      const booking = parseBooking(row);
       if (!booking) return res.status(404).json({ error: "Booking not found." });
       id = booking.id;
     }
     if (!id) return res.status(400).json({ error: "bookingId or bookingReference is required." });
 
-    const result = await paymentService.initiateCheckout(database, id, {
+    const result = await paymentCore.initiateCheckout(id, {
       userId: req.userId,
       email,
     });
     res.json({ ok: true, ...result });
   } catch (err) {
-    console.error(err);
+    console.error("Payment initiate:", err);
     res.status(400).json({ error: err.message || "Could not start checkout." });
   }
 });
@@ -68,16 +42,16 @@ router.post("/verify", async (req, res) => {
   try {
     const reference = String(req.body?.reference || req.query?.reference || "").trim();
     if (!reference) return res.status(400).json({ error: "reference is required." });
-    const payment = await paymentService.verifyPaystackPayment(database, reference);
+    const payment = await paymentCore.verifyPaystackPayment(reference);
     res.json({ ok: true, payment });
   } catch (err) {
-    console.error(err);
+    console.error("Payment verify:", err);
     res.status(400).json({ error: err.message || "Payment verification failed." });
   }
 });
 
-router.post("/webhook/paystack", async (req, res) => {
-  try {
+function paystackWebhookHandler(req, res) {
+  (async () => {
     const secret = process.env.PAYSTACK_SECRET_KEY;
     if (!secret) return res.status(503).send("Paystack not configured.");
 
@@ -90,18 +64,28 @@ router.post("/webhook/paystack", async (req, res) => {
 
     const event = JSON.parse(rawBody.toString("utf8"));
     if (event.event === "charge.success" && event.data?.reference) {
-      await paymentService.verifyPaystackPayment(database, event.data.reference);
+      await paymentCore.verifyPaystackPayment(event.data.reference);
     }
     res.send("OK");
-  } catch (err) {
+  })().catch((err) => {
     console.error("Paystack webhook:", err);
     res.status(500).send("Webhook error.");
+  });
+}
+
+router.get("/mine", requireClient, (req, res) => {
+  try {
+    const payments = paymentCore.listPaymentsForUser(req.userId);
+    res.json({ payments });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not load payments." });
   }
 });
 
-router.get("/", requireAdmin, async (req, res) => {
+router.get("/", requireAdmin, (req, res) => {
   try {
-    const payments = await paymentService.listAllPayments(database, {
+    const payments = paymentCore.listAllPayments({
       status: req.query.status,
       limit: req.query.limit,
     });
@@ -112,12 +96,11 @@ router.get("/", requireAdmin, async (req, res) => {
   }
 });
 
-router.post("/:id/confirm", requireAdmin, async (req, res) => {
+router.post("/:id/confirm", requireAdmin, (req, res) => {
   try {
-    const payment = await paymentService.confirmPayment(database, req.params.id, {
+    const payment = paymentCore.confirmPayment(req.params.id, {
       reference: req.body?.reference,
-      note: req.body?.note,
-      adminNote: req.body?.adminNote,
+      adminNote: req.body?.adminNote || req.body?.note,
     });
     if (!payment) return res.status(404).json({ error: "Payment not found." });
     res.json({ ok: true, payment });
@@ -127,11 +110,11 @@ router.post("/:id/confirm", requireAdmin, async (req, res) => {
   }
 });
 
-router.post("/booking/:bookingId/confirm", requireAdmin, async (req, res) => {
+router.post("/booking/:bookingId/confirm", requireAdmin, (req, res) => {
   try {
-    const payment = await paymentService.confirmPaymentByBooking(database, req.params.bookingId, {
+    const payment = paymentCore.confirmPaymentByBooking(req.params.bookingId, {
       reference: req.body?.reference,
-      note: req.body?.note,
+      adminNote: req.body?.note,
     });
     res.json({ ok: true, payment });
   } catch (err) {
@@ -140,9 +123,9 @@ router.post("/booking/:bookingId/confirm", requireAdmin, async (req, res) => {
   }
 });
 
-router.post("/:id/refund", requireAdmin, async (req, res) => {
+router.post("/:id/refund", requireAdmin, (req, res) => {
   try {
-    const payment = await paymentService.refundPayment(database, req.params.id, {
+    const payment = paymentCore.refundPayment(req.params.id, {
       reason: req.body?.reason,
       amount: req.body?.amount,
     });
@@ -155,3 +138,4 @@ router.post("/:id/refund", requireAdmin, async (req, res) => {
 });
 
 module.exports = router;
+module.exports.paystackWebhookHandler = paystackWebhookHandler;

@@ -6,6 +6,17 @@
   const loadingEl = document.getElementById("confirmationLoading");
   const errorEl = document.getElementById("confirmationError");
   const contentEl = document.getElementById("confirmationContent");
+  const backBtn = document.getElementById("confirmBackBtn");
+
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+        return;
+      }
+      window.location.href = "rooms.html";
+    });
+  }
 
   function statusLabel(status) {
     const map = {
@@ -147,14 +158,18 @@
         payBtn.textContent = "Card payments unavailable";
         payBtn.classList.remove("btn--primary");
         payBtn.classList.add("btn--ghost");
+        payBtn.title = "Add Paystack keys to server/.env — see server/.env.example";
         payBtn.addEventListener("click", () => {
           alert(
-            "Card payments are not configured on this site yet. Use EFT bank details above, or contact the administrator to set up Paystack (PAYSTACK_SECRET_KEY in server/.env)."
+            "Card payments need Paystack API keys on the server.\n\n1. Copy server/.env.example to server/.env\n2. Add PAYSTACK_PUBLIC_KEY and PAYSTACK_SECRET_KEY from https://dashboard.paystack.com\n3. Restart: npm start\n\nYou can still pay by EFT using the bank details above."
           );
         });
       } else {
         payBtn.textContent = "Pay with card";
         payBtn.addEventListener("click", () => startCardPayment(booking, payBtn));
+        if (params.get("pay") === "card") {
+          setTimeout(() => startCardPayment(booking, payBtn), 400);
+        }
       }
     }
 

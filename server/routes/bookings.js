@@ -1,6 +1,8 @@
 const express = require("express");
 const { db, parseBooking } = require("../db");
 const { requireClient, optionalClient, requireAdmin } = require("../middleware");
+const bookingEmails = require("../lib/booking-emails");
+const paymentCore = require("../lib/payments-core");
 
 const router = express.Router();
 
@@ -21,11 +23,13 @@ function insertBooking(data) {
   const eventTypes = JSON.stringify(
     Array.isArray(data.eventTypes) ? data.eventTypes : data.eventTypes ? [data.eventTypes] : []
   );
+  const totalAmount =
+    Number(data.totalAmount) > 0 ? Number(data.totalAmount) : CATALOG_AMOUNTS[data.package] || 0;
   db.prepare(
     `INSERT INTO bookings (
       id, created_at, source, package, price, payment, name, email, phone,
-      check_in, check_out, guests, notes, event_types, user_id, status, room_id, booking_reference
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      check_in, check_out, guests, notes, event_types, user_id, status, room_id, booking_reference, total_amount
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).run(
     id,
     createdAt,
@@ -43,10 +47,19 @@ function insertBooking(data) {
     eventTypes,
     data.userId || "",
     data.status || "confirmed",
-    data.roomId || "",
-    bookingReference
+    data.roomId || PACKAGE_TO_ROOM_ID[data.package] || "",
+    bookingReference,
+    totalAmount
   );
-  return parseBooking(db.prepare("SELECT * FROM bookings WHERE id = ?").get(id));
+  const booking = parseBooking(db.prepare("SELECT * FROM bookings WHERE id = ?").get(id));
+  if (booking.payment === "online") {
+    try {
+      paymentCore.createPaymentForBooking(booking);
+    } catch (err) {
+      console.warn("Payment record not created:", err.message);
+    }
+  }
+  return booking;
 }
 
 function getLoyaltyTier(points) {
@@ -96,10 +109,91 @@ function createInvoice(userId, booking, catalogAmount, payment) {
 const CATALOG_AMOUNTS = {
   "Standard Night Stay": 750,
   "Shared Unit Stay": 1400,
+  "Weekly Stay Package": 5250,
   "Monthly Rental Package": 8000,
   "3-Day Safari Adventure": 597,
   "7-Day Ultimate Experience": 1323,
 };
+
+const PACKAGE_TO_ROOM_ID = {
+  "Standard Night Stay": "standard-night",
+  "Shared Unit Stay": "shared-unit",
+  "Weekly Stay Package": "weekly-stay",
+  "Monthly Rental Package": "monthly-rental",
+  "3-Day Safari Adventure": "safari-3day",
+  "7-Day Ultimate Experience": "safari-7day",
+  "Private Event / Celebration": "private-event",
+};
+
+const ROOM_PACKAGE_NAMES = Object.entries(PACKAGE_TO_ROOM_ID).reduce((acc, [pkg, id]) => {
+  if (!acc[id]) acc[id] = [];
+  acc[id].push(pkg);
+  return acc;
+}, {});
+
+function normalizedDate(value) {
+  return String(value || "").trim();
+}
+
+function countOverlappingBookings(roomId, checkIn, checkOut) {
+  const packageNames = ROOM_PACKAGE_NAMES[roomId] || [];
+  const statusClause = `status IN ('pending', 'confirmed', 'checked_in')`;
+  const dateClause = `check_in < ? AND check_out > ?`;
+
+  if (!packageNames.length) {
+    return db
+      .prepare(
+        `SELECT COUNT(*) AS cnt FROM bookings WHERE room_id = ? AND ${statusClause} AND ${dateClause}`
+      )
+      .get(roomId, checkOut, checkIn);
+  }
+
+  const placeholders = packageNames.map(() => "?").join(", ");
+  return db
+    .prepare(
+      `SELECT COUNT(*) AS cnt FROM bookings
+       WHERE ${statusClause} AND ${dateClause}
+         AND (room_id = ? OR (COALESCE(room_id, '') = '' AND package IN (${placeholders})))`
+    )
+    .get(checkOut, checkIn, roomId, ...packageNames);
+}
+
+router.get("/availability", (req, res) => {
+  try {
+    const roomId = String(req.query.roomId || "").trim();
+    const checkIn = normalizedDate(req.query.checkIn);
+    const checkOut = normalizedDate(req.query.checkOut);
+    const guests = Number(req.query.guests || 1);
+    const maxGuests = Number(req.query.maxGuests || 99);
+    const totalUnits = Math.max(1, Number(req.query.totalUnits || 1));
+
+    if (!roomId || !checkIn || !checkOut) {
+      return res.status(400).json({ error: "roomId, checkIn and checkOut are required." });
+    }
+    if (checkOut <= checkIn) {
+      return res.json({ available: false, reason: "invalid_dates", roomId });
+    }
+    if (guests > maxGuests) {
+      return res.json({ available: false, reason: "too_many_guests", roomId, maxGuests });
+    }
+
+    const row = countOverlappingBookings(roomId, checkIn, checkOut);
+    const bookedUnits = Number(row?.cnt || 0);
+    const availableUnits = Math.max(0, totalUnits - bookedUnits);
+    return res.json({
+      available: availableUnits > 0,
+      reason: availableUnits > 0 ? "ok" : "fully_booked",
+      roomId,
+      bookedUnits,
+      availableUnits,
+      totalUnits,
+      maxGuests,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not check availability." });
+  }
+});
 
 router.get("/mine", requireClient, (req, res) => {
   try {
@@ -138,7 +232,9 @@ router.get("/reference/:ref", (req, res) => {
     .prepare("SELECT * FROM bookings WHERE id = ? OR booking_reference = ?")
     .get(ref, ref);
   if (!row) return res.status(404).json({ error: "Booking not found." });
-  res.json({ booking: parseBooking(row) });
+  const booking = parseBooking(row);
+  booking.paymentRecord = paymentCore.getLatestPaymentForBooking(booking.id);
+  res.json({ booking });
 });
 
 router.post("/", optionalClient, (req, res) => {
@@ -159,6 +255,7 @@ router.post("/", optionalClient, (req, res) => {
       awardLoyalty(data.userId, amount, `Booking: ${booking.package}`);
       createInvoice(data.userId, booking, amount, booking.payment);
     }
+    bookingEmails.handleBookingCreated(db, booking);
     res.status(201).json({ ok: true, booking });
   } catch (err) {
     console.error(err);
@@ -194,6 +291,30 @@ router.delete("/:id", requireAdmin, (req, res) => {
 router.delete("/", requireAdmin, (req, res) => {
   db.prepare("DELETE FROM bookings").run();
   res.json({ ok: true });
+});
+
+/** Admin marks an online booking as paid — sends payment receipt email. */
+router.post("/:id/payment-received", requireAdmin, (req, res) => {
+  try {
+    const row = db.prepare("SELECT * FROM bookings WHERE id = ?").get(req.params.id);
+    if (!row) return res.status(404).json({ error: "Booking not found." });
+    const booking = parseBooking(row);
+    if (booking.payment !== "online") {
+      return res.status(400).json({ error: "Receipt emails are only sent for online payments." });
+    }
+    const amount = Number(req.body?.amount) || booking.totalAmount || 0;
+    const paymentReference = String(req.body?.reference || booking.bookingReference || booking.id);
+    bookingEmails.handlePaymentReceived(booking, { amount, paymentReference });
+    if (booking.userId) {
+      db.prepare(
+        `UPDATE invoices SET status = 'paid' WHERE booking_id = ? AND user_id = ? AND status != 'paid'`
+      ).run(booking.id, booking.userId);
+    }
+    res.json({ ok: true, message: "Payment receipt email queued." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not send payment receipt." });
+  }
 });
 
 module.exports = router;

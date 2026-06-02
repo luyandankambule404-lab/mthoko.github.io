@@ -95,7 +95,48 @@ db.exec(`
     interests TEXT DEFAULT '',
     created_at TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS email_jobs (
+    id TEXT PRIMARY KEY,
+    booking_id TEXT NOT NULL,
+    type TEXT NOT NULL,
+    to_email TEXT NOT NULL,
+    send_at TEXT NOT NULL,
+    sent_at TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS payments (
+    id TEXT PRIMARY KEY,
+    booking_id TEXT NOT NULL,
+    user_id TEXT DEFAULT '',
+    amount REAL NOT NULL DEFAULT 0,
+    currency TEXT DEFAULT 'ZAR',
+    method TEXT DEFAULT 'card',
+    provider TEXT DEFAULT 'manual',
+    provider_ref TEXT DEFAULT '',
+    status TEXT DEFAULT 'pending',
+    metadata TEXT DEFAULT '{}',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_email_jobs_pending ON email_jobs(status, send_at);
+  CREATE INDEX IF NOT EXISTS idx_payments_booking ON payments(booking_id);
+  CREATE INDEX IF NOT EXISTS idx_payments_provider_ref ON payments(provider_ref);
 `);
+
+function ensureColumn(table, column, definition) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
+  if (!cols.includes(column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+  }
+}
+
+ensureColumn("bookings", "booking_reference", "TEXT DEFAULT ''");
+ensureColumn("bookings", "room_id", "TEXT DEFAULT ''");
+ensureColumn("bookings", "total_amount", "REAL DEFAULT 0");
 
 function mergeTable(source, dest, table) {
   const cols = source.prepare(`PRAGMA table_info(${table})`).all();

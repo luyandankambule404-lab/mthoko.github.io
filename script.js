@@ -403,7 +403,7 @@
   }
   setMinCheckInDates();
 
-  const bookingAvailabilityHint = document.getElementById("bookingAvailabilityHint");
+  const bookingAvailabilityPanel = document.getElementById("bookingAvailabilityPanel");
   const bookingPriceSummary = document.getElementById("bookingPriceSummary");
   const bookingPriceLines = document.getElementById("bookingPriceLines");
   const bookingPriceTotal = document.getElementById("bookingPriceTotal");
@@ -413,6 +413,45 @@
   function getSelectedRoomId(selectEl) {
     const sel = selectEl?.selectedOptions?.[0];
     return sel?.dataset?.roomId || (typeof KmmRooms !== "undefined" ? KmmRooms.getByPackageName(sel?.value || "")?.id : "") || "";
+  }
+
+  function getAvailabilityPanel(formKind) {
+    return formKind === "modal"
+      ? bookingAvailabilityPanel
+      : document.getElementById("contactAvailabilityPanel");
+  }
+
+  function renderFormAvailability(panel, { status, message, meta = "" }) {
+    if (!panel) return;
+    const badge = panel.querySelector("[data-availability-badge]");
+    const msg = panel.querySelector("[data-availability-message]");
+    const metaEl = panel.querySelector("[data-availability-meta]");
+
+    panel.classList.remove(
+      "form-availability--ok",
+      "form-availability--bad",
+      "form-availability--loading",
+      "form-availability--idle"
+    );
+    panel.classList.add(`form-availability--${status}`);
+
+    const badgeText = {
+      ok: "Available",
+      bad: "Unavailable",
+      loading: "Checking…",
+      idle: "Live",
+    };
+    if (badge) badge.textContent = badgeText[status] || "Live";
+    if (msg) msg.textContent = message;
+    if (metaEl) {
+      if (meta) {
+        metaEl.textContent = meta;
+        metaEl.hidden = false;
+      } else {
+        metaEl.textContent = "";
+        metaEl.hidden = true;
+      }
+    }
   }
 
   function renderPriceSummary(pricing) {
@@ -455,10 +494,10 @@
     const quote = await KmmRooms.getQuote({ roomId, packageName, checkIn, checkOut, guests, couponCode });
     if (quote.coupon && quote.coupon.valid === false) {
       renderPriceSummary(null);
-      if (bookingAvailabilityHint) {
-        bookingAvailabilityHint.textContent = quote.coupon.error || "Invalid coupon.";
-        bookingAvailabilityHint.hidden = false;
-      }
+      renderFormAvailability(bookingAvailabilityPanel, {
+        status: "bad",
+        message: quote.coupon.error || "Invalid coupon code for these dates.",
+      });
       return;
     }
     if (quote.pricing) {
@@ -469,8 +508,8 @@
 
   async function refreshAvailabilityHint(formKind) {
     const isModal = formKind === "modal";
-    const hintEl = isModal ? bookingAvailabilityHint : document.getElementById("contactAvailabilityHint");
-    if (!hintEl || typeof KmmRooms === "undefined") return;
+    const panel = getAvailabilityPanel(formKind);
+    if (!panel) return;
 
     const packageSelect = isModal ? bookingPackageSelect : contactPackageSelect;
     const checkIn = document.getElementById(isModal ? "bookingCheckIn" : "checkIn")?.value || "";
@@ -479,34 +518,93 @@
     const roomId = getSelectedRoomId(packageSelect);
     const packageName = packageSelect?.value || "";
 
-    if (!roomId || !checkIn || !checkOut) {
-      hintEl.hidden = true;
-      hintEl.textContent = "";
-      hintEl.classList.remove("availability-hint--ok", "availability-hint--bad");
+    if (!roomId || packageName === "General Inquiry") {
+      renderFormAvailability(panel, {
+        status: "idle",
+        message: "Select an accommodation package to check live room availability.",
+      });
       return;
     }
 
-    hintEl.hidden = false;
-    hintEl.textContent = "Checking availability…";
-    hintEl.classList.remove("availability-hint--ok", "availability-hint--bad");
+    if (!checkIn || !checkOut) {
+      renderFormAvailability(panel, {
+        status: "idle",
+        message: "Choose check-in and check-out dates to see live availability.",
+      });
+      return;
+    }
+
+    renderFormAvailability(panel, {
+      status: "loading",
+      message: "Checking availability for your selected dates…",
+    });
+
+    if (typeof KmmRooms === "undefined") {
+      renderFormAvailability(panel, {
+        status: "idle",
+        message: "Start the server (npm start) to enable live availability checks.",
+      });
+      return;
+    }
 
     await KmmRooms.ready();
-    const result = await KmmRooms.checkAvailability({ roomId, packageName, checkIn, checkOut, guests });
+    let result;
+    try {
+      result = await KmmRooms.checkAvailability({ roomId, packageName, checkIn, checkOut, guests });
+    } catch (err) {
+      renderFormAvailability(panel, {
+        status: "idle",
+        message: "Live availability is offline. You can still submit your booking request.",
+      });
+      if (isModal) refreshBookingPrice();
+      return;
+    }
 
-    if (result.available) {
-      hintEl.textContent = "✓ These dates are available for your selected room.";
-      hintEl.classList.add("availability-hint--ok");
+    const unitsMeta =
+      result.totalUnits != null
+        ? `${result.availableUnits ?? "—"} of ${result.totalUnits} unit(s) available · max ${result.maxGuests} guests`
+        : "";
+
+    const isAvailable = result.available === true || result.reason === "ok";
+
+    if (isAvailable) {
+      renderFormAvailability(panel, {
+        status: "ok",
+        message: "Great news — your selected room is available for these dates.",
+        meta: unitsMeta,
+      });
     } else if (result.reason === "too_many_guests") {
-      hintEl.textContent = `This room allows up to ${result.maxGuests} guests.`;
-      hintEl.classList.add("availability-hint--bad");
+      renderFormAvailability(panel, {
+        status: "bad",
+        message: `Guest count is too high for this room (max ${result.maxGuests} guests).`,
+        meta: unitsMeta,
+      });
     } else if (result.reason === "fully_booked") {
-      hintEl.textContent = "These dates are not available. Please choose different dates.";
-      hintEl.classList.add("availability-hint--bad");
+      renderFormAvailability(panel, {
+        status: "bad",
+        message: "These dates are fully booked. Please choose different dates.",
+        meta: unitsMeta,
+      });
     } else if (result.reason === "invalid_dates") {
-      hintEl.textContent = "Check-out must be after check-in.";
-      hintEl.classList.add("availability-hint--bad");
+      renderFormAvailability(panel, {
+        status: "bad",
+        message: "Check-out must be after check-in.",
+      });
+    } else if (result.reason === "room_not_found") {
+      renderFormAvailability(panel, {
+        status: "bad",
+        message: "This package is not set up for live availability. Choose a room package or contact us.",
+      });
+    } else if (result.reason === "offline") {
+      renderFormAvailability(panel, {
+        status: "idle",
+        message: "Live availability is offline. You can still submit your booking request.",
+      });
     } else {
-      hintEl.hidden = true;
+      renderFormAvailability(panel, {
+        status: "idle",
+        message: "Availability could not be confirmed right now. Try again in a moment.",
+      });
     }
 
     if (isModal) refreshBookingPrice();
@@ -525,14 +623,18 @@
     document.getElementById(id)?.addEventListener("change", () => scheduleAvailabilityCheck("contact"));
     document.getElementById(id)?.addEventListener("input", () => scheduleAvailabilityCheck("contact"));
   });
-
-  if (typeof KmmRooms !== "undefined") KmmRooms.ready();
+  bookingPackageSelect?.addEventListener("change", () => scheduleAvailabilityCheck("modal"));
 
   const bookingEventTypeRow = document.getElementById("bookingEventTypeRow");
   const bookingEventTypeSelect = document.getElementById("bookingEventType");
   const contactEventTypeRow = document.getElementById("contactEventTypeRow");
   const contactEventTypeSelect = document.getElementById("contactEventType");
   const contactPackageSelect = document.getElementById("contactPackage");
+  contactPackageSelect?.addEventListener("change", () => scheduleAvailabilityCheck("contact"));
+
+  if (typeof KmmRooms !== "undefined") KmmRooms.ready();
+  if (document.getElementById("contactForm")) scheduleAvailabilityCheck("contact");
+
   let selectedEventName = null;
 
   function isPrivateEventPackage(packageName) {
@@ -697,6 +799,7 @@
     if (onlineRadio) onlineRadio.checked = true;
     updatePaymentHints(bookingForm);
     applyGuestFieldsForBooking();
+    scheduleAvailabilityCheck("modal");
 
     bookingModal.classList.add("booking-modal--open");
     bookingModal.setAttribute("aria-hidden", "false");
@@ -966,13 +1069,34 @@
 
     const data = {
       package: packageName,
+      roomId: getSelectedRoomId(contactPackageSelect),
       payment,
       ...getContactGuestData(),
       checkIn: document.getElementById("checkIn").value,
       checkOut: document.getElementById("checkOut").value,
+      guests: document.getElementById("contactGuests")?.value || "1",
       notes: document.getElementById("message").value.trim(),
       eventTypes: eventType ? [eventType] : [],
     };
+
+    if (data.roomId && typeof KmmRooms !== "undefined") {
+      await KmmRooms.ready();
+      const availability = await KmmRooms.checkAvailability({
+        roomId: data.roomId,
+        packageName: data.package,
+        checkIn: data.checkIn,
+        checkOut: data.checkOut,
+        guests: data.guests,
+      });
+      if (!availability.available && availability.reason !== "offline") {
+        alert(
+          availability.reason === "too_many_guests"
+            ? `This room allows a maximum of ${availability.maxGuests} guests.`
+            : "Selected dates are not available. Please choose different dates."
+        );
+        return;
+      }
+    }
 
     try {
       await persistBooking(data, "contact-form");

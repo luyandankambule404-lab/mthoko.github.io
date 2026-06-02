@@ -76,18 +76,26 @@
         <h2>Write a <em>Review</em></h2>
         <div id="reviewFormWrap">
           <form id="reviewForm" class="review-form">
-            <label for="reviewRating">Rating</label>
-            <select id="reviewRating" required>
-              <option value="5">5 — Excellent</option>
-              <option value="4">4 — Good</option>
-              <option value="3">3 — Average</option>
-              <option value="2">2 — Fair</option>
-              <option value="1">1 — Poor</option>
-            </select>
-            <label for="reviewTitle">Title <span class="optional">(optional)</span></label>
-            <input type="text" id="reviewTitle" maxlength="120" placeholder="Summarize your experience" />
-            <label for="reviewBody">Your review</label>
-            <textarea id="reviewBody" rows="4" required minlength="10" placeholder="Tell others about your stay at KMM Lifestyle…"></textarea>
+            <div class="review-form__grid">
+              <div class="review-form__field review-form__field--compact">
+                <label for="reviewRating">Rating</label>
+                <select id="reviewRating" required>
+                  <option value="5">5 — Excellent</option>
+                  <option value="4">4 — Good</option>
+                  <option value="3">3 — Average</option>
+                  <option value="2">2 — Fair</option>
+                  <option value="1">1 — Poor</option>
+                </select>
+              </div>
+              <div class="review-form__field">
+                <label for="reviewTitle">Title <span class="optional">(optional)</span></label>
+                <input type="text" id="reviewTitle" maxlength="120" placeholder="Summarize your experience" />
+              </div>
+              <div class="review-form__field review-form__field--full">
+                <label for="reviewBody">Your review</label>
+                <textarea id="reviewBody" rows="5" required minlength="10" placeholder="Tell others about your stay at KMM Lifestyle..."></textarea>
+              </div>
+            </div>
             <p class="form-error" id="reviewFormError" hidden></p>
             <p class="form-success" id="reviewFormSuccess" hidden></p>
             <button type="submit" class="btn btn--primary">Submit review</button>

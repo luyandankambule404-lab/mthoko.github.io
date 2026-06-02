@@ -16,6 +16,7 @@
     "express": "^4.21.2",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.2",
-    "kmm-lifestyle": "file:.."
+    "kmm-lifestyle": "file:..",
+    "nodemailer": "^6.10.1"
   }
 }

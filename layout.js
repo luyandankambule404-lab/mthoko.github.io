@@ -1,5 +1,24 @@
 /* Shared header, footer, booking modal — loaded on public site pages */
 (function () {
+  async function clearLegacyOfflineCache() {
+    if (!("serviceWorker" in navigator)) return;
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((reg) => reg.unregister()));
+    } catch (_err) {
+      // Ignore: some browsers can block this in private modes.
+    }
+    if (!("caches" in window)) return;
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+    } catch (_err) {
+      // Ignore cache cleanup errors to avoid breaking page boot.
+    }
+  }
+
+  clearLegacyOfflineCache();
+
   const page = document.body.dataset.page || "home";
   const WHATSAPP_PAGES = new Set(["contact"]);
   const logoSrc = () =>
@@ -171,7 +190,14 @@
             <div><label for="bookingCheckIn">Check-in</label><input type="date" id="bookingCheckIn" required /></div>
             <div><label for="bookingCheckOut">Check-out</label><input type="date" id="bookingCheckOut" required /></div>
           </div>
-          <p class="availability-hint" id="bookingAvailabilityHint" hidden></p>
+          <div class="form-availability" id="bookingAvailabilityPanel" aria-live="polite">
+            <div class="form-availability__head">
+              <span class="form-availability__badge" data-availability-badge>Live</span>
+              <strong class="form-availability__title">Room availability</strong>
+            </div>
+            <p class="form-availability__message" data-availability-message>Select your package and stay dates to check availability in real time.</p>
+            <p class="form-availability__meta" data-availability-meta hidden></p>
+          </div>
           <div class="booking-price-summary" id="bookingPriceSummary" hidden>
             <h3 class="booking-price-summary__title">Price estimate</h3>
             <ul class="booking-price-summary__lines" id="bookingPriceLines"></ul>

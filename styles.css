@@ -1090,6 +1090,110 @@ body.gallery-lightbox-open {
   background: rgba(201, 169, 98, 0.1);
 }
 
+.review-submit .container--narrow {
+  max-width: 860px;
+}
+
+.review-submit .section__tag {
+  margin-bottom: 0.65rem;
+}
+
+.review-submit h2 {
+  margin-bottom: 1.35rem;
+}
+
+.review-form {
+  background: linear-gradient(160deg, var(--color-surface) 0%, rgba(201, 169, 98, 0.08) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem;
+  box-shadow: var(--shadow);
+}
+
+.review-form__grid {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.7fr) minmax(260px, 1.3fr);
+  gap: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.review-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+}
+
+.review-form__field--full {
+  grid-column: 1 / -1;
+}
+
+.review-form label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-gold-light);
+}
+
+.review-form select,
+.review-form input,
+.review-form textarea {
+  width: 100%;
+  background: var(--color-surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  line-height: 1.4;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.review-form select,
+.review-form input {
+  min-height: 48px;
+  padding: 0.78rem 0.9rem;
+}
+
+.review-form textarea {
+  min-height: 170px;
+  padding: 0.8rem 0.95rem;
+  resize: vertical;
+}
+
+.review-form select:focus,
+.review-form input:focus,
+.review-form textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.review-form .form-error,
+.review-form .form-success {
+  margin-bottom: 0.8rem;
+  padding: 0.72rem 0.88rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.review-form .form-error {
+  background: rgba(232, 138, 138, 0.12);
+  border: 1px solid rgba(232, 138, 138, 0.35);
+  color: #ffb5b5;
+}
+
+.review-form .form-success {
+  background: rgba(114, 216, 161, 0.12);
+  border: 1px solid rgba(114, 216, 161, 0.4);
+  color: #9af0c5;
+}
+
+.review-form .btn {
+  min-height: 48px;
+  min-width: 190px;
+}
+
 /* Subscribe */
 .subscribe {
   background: linear-gradient(135deg, var(--color-surface) 0%, rgba(201, 169, 98, 0.12) 50%, var(--color-surface) 100%);
@@ -1467,6 +1571,90 @@ body.gallery-lightbox-open {
   color: #ef9a9a;
 }
 
+.form-availability {
+  margin: 0.25rem 0 1rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.form-availability__head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.45rem;
+}
+
+.form-availability__title {
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+}
+
+.form-availability__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.5rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+}
+
+.form-availability__message {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--color-text);
+}
+
+.form-availability__meta {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.form-availability--ok {
+  border-color: rgba(76, 175, 80, 0.45);
+  background: rgba(76, 175, 80, 0.08);
+}
+
+.form-availability--ok .form-availability__badge {
+  border-color: rgba(76, 175, 80, 0.5);
+  color: #a5d6a7;
+}
+
+.form-availability--bad {
+  border-color: rgba(244, 67, 54, 0.45);
+  background: rgba(244, 67, 54, 0.08);
+}
+
+.form-availability--bad .form-availability__badge {
+  border-color: rgba(244, 67, 54, 0.5);
+  color: #ef9a9a;
+}
+
+.form-availability--loading {
+  border-color: rgba(201, 169, 98, 0.45);
+  background: rgba(201, 169, 98, 0.08);
+}
+
+.form-availability--loading .form-availability__badge {
+  border-color: rgba(201, 169, 98, 0.5);
+  color: var(--color-gold-light);
+}
+
+.form-availability--idle .form-availability__message {
+  color: var(--color-muted);
+}
+
 .booking-signed-in-hint {
   font-size: 0.88rem;
   margin: 0 0 1rem;
@@ -1839,6 +2027,7 @@ body.modal-open {
   .features__grid { grid-template-columns: 1fr; }
   .tour-card { grid-template-columns: 1fr; }
   .footer__grid { grid-template-columns: 1fr 1fr; }
+  .review-form__grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -1852,6 +2041,10 @@ body.modal-open {
 
   .section {
     padding: 4.25rem 0;
+  }
+
+  .review-form {
+    padding: 1.05rem;
   }
 
   .section__header {
@@ -2286,3 +2479,68 @@ body.modal-open {
 
 .badge--checked_in { background: rgba(33, 150, 243, 0.2); color: #90caf9; }
 .badge--checked_out { background: rgba(158, 158, 158, 0.2); color: #e0e0e0; }
+
+/* Mobile usability polish */
+@media (max-width: 768px) {
+  /* Prevent iOS zoom-on-focus and improve touch readability */
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+
+  .page-hero h1,
+  .section__title,
+  .hero h1 {
+    text-wrap: balance;
+  }
+
+  .page-hero p,
+  .section__lead {
+    max-width: 100%;
+  }
+
+  /* Keep action stacks easy to tap on phone screens */
+  .confirmation__actions .btn,
+  .booking-modal__success-actions .btn,
+  .subscribe__form-wrap .btn,
+  .contact__form .btn,
+  #confirmationContent .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Booking and confirmation key/value rows collapse cleanly */
+  .booking-transfer-panel__list li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+    align-items: start;
+  }
+
+  .booking-transfer-panel__list li span {
+    font-size: 0.72rem;
+  }
+
+  /* Better card spacing density on mobile */
+  .card,
+  .confirmation__card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .booking-transfer-panel__list li strong {
+    font-size: 0.96rem;
+    line-height: 1.35;
+  }
+
+  .footer__subscribe {
+    max-width: 100%;
+    flex-direction: column;
+  }
+
+  .footer__subscribe .btn {
+    width: 100%;
+  }
+}

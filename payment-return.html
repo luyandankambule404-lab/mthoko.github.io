@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KMM Lifestyle | Payment</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="payment-return">
+  <div id="site-header"></div>
+  <main class="page-main">
+    <section class="section">
+      <div class="container" style="max-width: 560px;">
+        <div id="paymentReturnLoading" class="card" style="padding:1.25rem;">Confirming your payment…</div>
+        <div id="paymentReturnSuccess" class="card" style="padding:1.25rem;" hidden>
+          <h1 style="margin-bottom:0.5rem;">Payment received</h1>
+          <p>Thank you — your card payment was successful.</p>
+          <a href="#" id="paymentReturnConfirmLink" class="btn btn--primary" style="margin-top:1rem;">View booking</a>
+        </div>
+        <div id="paymentReturnError" class="card" style="padding:1.25rem;" hidden>
+          <h1 style="margin-bottom:0.5rem;">Payment not confirmed</h1>
+          <p id="paymentReturnErrorMsg">We could not verify this payment. If money was deducted, contact us on WhatsApp with your reference.</p>
+          <a href="rooms.html" class="btn btn--ghost" style="margin-top:1rem;">Back to site</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="api.js"></script>
+  <script src="payments-store.js"></script>
+  <script src="layout.js"></script>
+  <script src="payment-return.js"></script>
+</body>
+</html>
