@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="features.css" />
 </head>
 <body data-page="gallery">
   <div id="site-header"></div>
@@ -22,15 +23,19 @@
     </section>
     <section class="gallery section">
       <div class="container">
-        <div class="gallery__grid">
-          <figure class="gallery__item gallery__item--wide"><button type="button" class="gallery__trigger" aria-label="View Luxury bedroom"><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=900&q=80" alt="Luxury bedroom" loading="lazy" /></button></figure>
-          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Modern living space"><img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80" alt="Modern living space" loading="lazy" /></button></figure>
-          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Apartment interior"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80" alt="Apartment interior" loading="lazy" /></button></figure>
-          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Comfortable lounge"><img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80" alt="Comfortable lounge" loading="lazy" /></button></figure>
-          <figure class="gallery__item gallery__item--tall"><button type="button" class="gallery__trigger" aria-label="View Hotel suite"><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=80" alt="Hotel suite" loading="lazy" /></button></figure>
-          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Kitchen area"><img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600&q=80" alt="Kitchen area" loading="lazy" /></button></figure>
-          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Premium room"><img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80" alt="Premium room" loading="lazy" /></button></figure>
-          <figure class="gallery__item"><button type="button" class="gallery__trigger" aria-label="View Bathroom amenities"><img src="https://images.unsplash.com/photo-1564540583246-934409427776?w=600&q=80" alt="Bathroom amenities" loading="lazy" /></button></figure>
+        <div class="gallery__grid" id="galleryGrid">
+          <figure class="gallery__item gallery__item--wide reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 1"><img src="images/IMG-20260527-WA0011.jpg" alt="KMM Lifestyle — photo 1" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 2"><img src="images/IMG-20260527-WA0012.jpg" alt="KMM Lifestyle — photo 2" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 3"><img src="images/IMG-20260527-WA0013.jpg" alt="KMM Lifestyle — photo 3" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 4"><img src="images/IMG-20260527-WA0014.jpg" alt="KMM Lifestyle — photo 4" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item gallery__item--tall reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 5"><img src="images/IMG-20260527-WA0015.jpg" alt="KMM Lifestyle — photo 5" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 6"><img src="images/IMG-20260527-WA0016.jpg" alt="KMM Lifestyle — photo 6" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 7"><img src="images/IMG-20260527-WA0017.jpg" alt="KMM Lifestyle — photo 7" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 8"><img src="images/IMG-20260527-WA0018.jpg" alt="KMM Lifestyle — photo 8" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 9"><img src="images/IMG-20260527-WA0019.jpg" alt="KMM Lifestyle — photo 9" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 10"><img src="images/IMG-20260527-WA0020.jpg" alt="KMM Lifestyle — photo 10" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 11"><img src="images/IMG-20260527-WA0021.jpg" alt="KMM Lifestyle — photo 11" loading="lazy" decoding="async" /></button></figure>
+          <figure class="gallery__item reveal visible"><button type="button" class="gallery__trigger" aria-label="View photo 12"><img src="images/IMG-20260527-WA0022.jpg" alt="KMM Lifestyle — photo 12" loading="lazy" decoding="async" /></button></figure>
         </div>
       </div>
     </section>
@@ -50,10 +55,15 @@
   <script src="api.js"></script>
   <script src="client-store.js"></script>
   <script src="bookings-store.js"></script>
+  <script src="accommodation-store.js"></script>
+  <script src="image-utils.js"></script>
+  <script src="gallery-page.js"></script>
   <script src="i18n.js"></script>
   <script src="site-paths.js"></script>
+  <script src="bank-details.js"></script>
   <script src="layout.js"></script>
   <script src="site-features.js"></script>
+  <script src="booking-flow.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

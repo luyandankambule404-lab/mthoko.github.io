@@ -8,8 +8,15 @@ function newId() {
   return `b-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function newReference() {
+  const stamp = new Date().toISOString().replace(/\D/g, "").slice(2, 12);
+  const rand = Math.random().toString(36).toUpperCase().slice(2, 6);
+  return `KMM-${stamp}-${rand}`;
+}
+
 function insertBooking(data) {
   const id = newId();
+  const bookingReference = newReference();
   const createdAt = new Date().toISOString();
   const eventTypes = JSON.stringify(
     Array.isArray(data.eventTypes) ? data.eventTypes : data.eventTypes ? [data.eventTypes] : []
@@ -17,8 +24,8 @@ function insertBooking(data) {
   db.prepare(
     `INSERT INTO bookings (
       id, created_at, source, package, price, payment, name, email, phone,
-      check_in, check_out, guests, notes, event_types, user_id, status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      check_in, check_out, guests, notes, event_types, user_id, status, room_id, booking_reference
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).run(
     id,
     createdAt,
@@ -35,7 +42,9 @@ function insertBooking(data) {
     data.notes || "",
     eventTypes,
     data.userId || "",
-    data.status || "confirmed"
+    data.status || "confirmed",
+    data.roomId || "",
+    bookingReference
   );
   return parseBooking(db.prepare("SELECT * FROM bookings WHERE id = ?").get(id));
 }
@@ -120,6 +129,16 @@ router.get("/mine", requireClient, (req, res) => {
       error: locked ? "Database is busy. Please try again in a moment." : "Could not load bookings.",
     });
   }
+});
+
+router.get("/reference/:ref", (req, res) => {
+  const ref = String(req.params.ref || "").trim();
+  if (!ref) return res.status(400).json({ error: "Reference is required." });
+  const row = db
+    .prepare("SELECT * FROM bookings WHERE id = ? OR booking_reference = ?")
+    .get(ref, ref);
+  if (!row) return res.status(404).json({ error: "Booking not found." });
+  res.json({ booking: parseBooking(row) });
 });
 
 router.post("/", optionalClient, (req, res) => {

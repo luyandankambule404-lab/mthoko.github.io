@@ -70,16 +70,45 @@
         </div>
       </div>
     </section>
+    <section class="section review-submit">
+      <div class="container container--narrow">
+        <span class="section__tag">Share your stay</span>
+        <h2>Write a <em>Review</em></h2>
+        <div id="reviewFormWrap">
+          <form id="reviewForm" class="review-form">
+            <label for="reviewRating">Rating</label>
+            <select id="reviewRating" required>
+              <option value="5">5 — Excellent</option>
+              <option value="4">4 — Good</option>
+              <option value="3">3 — Average</option>
+              <option value="2">2 — Fair</option>
+              <option value="1">1 — Poor</option>
+            </select>
+            <label for="reviewTitle">Title <span class="optional">(optional)</span></label>
+            <input type="text" id="reviewTitle" maxlength="120" placeholder="Summarize your experience" />
+            <label for="reviewBody">Your review</label>
+            <textarea id="reviewBody" rows="4" required minlength="10" placeholder="Tell others about your stay at KMM Lifestyle…"></textarea>
+            <p class="form-error" id="reviewFormError" hidden></p>
+            <p class="form-success" id="reviewFormSuccess" hidden></p>
+            <button type="submit" class="btn btn--primary">Submit review</button>
+          </form>
+        </div>
+      </div>
+    </section>
   </main>
   <div id="site-footer"></div>
   <div id="site-extras"></div>
   <script src="api.js"></script>
   <script src="client-store.js"></script>
   <script src="bookings-store.js"></script>
+  <script src="accommodation-store.js"></script>
   <script src="i18n.js"></script>
   <script src="site-paths.js"></script>
+  <script src="bank-details.js"></script>
   <script src="layout.js"></script>
   <script src="site-features.js"></script>
+  <script src="booking-flow.js"></script>
   <script src="script.js"></script>
+  <script src="reviews-page.js"></script>
 </body>
 </html>

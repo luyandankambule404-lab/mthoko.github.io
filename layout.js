@@ -53,7 +53,7 @@
       <div class="nav__mobile-actions">
         <a href="dashboard.html" class="btn btn--header" data-i18n="btn.account">My Account</a>
         <a href="admin.html" class="btn btn--header" data-i18n="btn.admin">Admin</a>
-        <a href="#" class="btn btn--header js-book-open" data-i18n="btn.book">Book Now</a>
+        <button type="button" class="btn btn--header js-book-open" data-i18n="btn.book">Book Now</button>
       </div>`;
 
   const headerHtml = `
@@ -66,7 +66,7 @@
       <div class="header__actions">
         <a href="dashboard.html" class="btn btn--header" data-i18n="btn.account">My Account</a>
         <a href="admin.html" class="btn btn--header" data-i18n="btn.admin">Admin</a>
-        <a href="#" class="btn btn--header js-book-open" data-i18n="btn.book">Book Now</a>
+        <button type="button" class="btn btn--header js-book-open" data-i18n="btn.book">Book Now</button>
       </div>
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -136,13 +136,19 @@
           <div class="form-row">
             <label for="bookingPackage">Package</label>
             <select id="bookingPackage" name="package" required>
-              <option value="Standard Night Stay">Standard Night Stay — R750/night</option>
-              <option value="Shared Unit Stay">Shared Unit Stay — R1400/night</option>
-              <option value="Weekly Stay Package">Weekly Stay Package</option>
-              <option value="Monthly Rental Package">Monthly Rental — R8000/month</option>
-              <option value="3-Day Safari Adventure">3-Day Safari Adventure</option>
-              <option value="7-Day Ultimate Experience">7-Day Ultimate Experience</option>
-              <option value="Private Event / Celebration">Private Event / Celebration</option>
+              <option value="Standard Night Stay" data-room-id="standard-night">Standard Night Stay — R750/night</option>
+              <option value="Shared Unit Stay" data-room-id="shared-unit">Shared Unit Stay — R1400/night</option>
+              <option value="Weekly Stay Package" data-room-id="weekly-stay">Weekly Stay Package</option>
+              <option value="Monthly Rental Package" data-room-id="monthly-rental">Monthly Rental — R8000/month</option>
+              <option value="3-Day Safari Adventure" data-room-id="safari-3day">3-Day Safari Adventure</option>
+              <option value="7-Day Ultimate Experience" data-room-id="safari-7day">7-Day Ultimate Experience</option>
+              <option value="Private Event / Celebration" data-room-id="private-event">Private Event / Celebration</option>
+            </select>
+          </div>
+          <div class="form-row" id="bookingEventTypeRow" hidden>
+            <label for="bookingEventType">Event type</label>
+            <select id="bookingEventType" name="eventType">
+              <option value="">Select an event</option>
             </select>
           </div>
           <fieldset class="payment-picker">
@@ -150,7 +156,7 @@
             <div class="payment-picker__options">
               <label class="payment-option">
                 <input type="radio" name="bookingPayment" value="online" checked />
-                <span class="payment-option__box"><strong>Book Online</strong><small>Card, EFT, Booking.com, Airbnb, Expedia</small></span>
+                <span class="payment-option__box"><strong>Book Online</strong><small>Pay by card (Paystack) or EFT after booking</small></span>
               </label>
               <label class="payment-option">
                 <input type="radio" name="bookingPayment" value="cash" />
@@ -158,16 +164,29 @@
               </label>
             </div>
           </fieldset>
-          <p class="payment-hint" id="paymentHintOnline">Your booking is saved on our site. We will contact you for payment — no email app redirect.</p>
+          <p class="payment-hint" id="paymentHintOnline">Pay by EFT using the bank details below.</p>
           <p class="payment-hint" id="paymentHintCash" hidden>Cash payments are made at check-in.</p>
+          <div id="bookingTransferPanel" class="booking-transfer-panel"></div>
           <div class="form-row form-row--half">
             <div><label for="bookingCheckIn">Check-in</label><input type="date" id="bookingCheckIn" required /></div>
-            <div><label for="bookingCheckOut">Check-out</label><input type="date" id="bookingCheckOut" /></div>
+            <div><label for="bookingCheckOut">Check-out</label><input type="date" id="bookingCheckOut" required /></div>
           </div>
-          <div class="form-row"><label for="bookingName">Full Name</label><input type="text" id="bookingName" required placeholder="Your name" /></div>
-          <div class="form-row"><label for="bookingEmail">Email</label><input type="email" id="bookingEmail" required placeholder="you@email.com" /></div>
-          <div class="form-row"><label for="bookingPhone">Phone / WhatsApp</label><input type="tel" id="bookingPhone" required placeholder="+27 82 000 0000" /></div>
+          <p class="availability-hint" id="bookingAvailabilityHint" hidden></p>
+          <div class="booking-price-summary" id="bookingPriceSummary" hidden>
+            <h3 class="booking-price-summary__title">Price estimate</h3>
+            <ul class="booking-price-summary__lines" id="bookingPriceLines"></ul>
+            <p class="booking-price-summary__total" id="bookingPriceTotal"></p>
+          </div>
+          <p class="booking-signed-in-hint" id="bookingSignedInHint" hidden>
+            Booking as <strong id="bookingSignedInName"></strong> · <span id="bookingSignedInEmail"></span>
+          </p>
+          <div id="bookingGuestFields">
+            <div class="form-row"><label for="bookingName">Full Name</label><input type="text" id="bookingName" required placeholder="Your name" /></div>
+            <div class="form-row"><label for="bookingEmail">Email</label><input type="email" id="bookingEmail" required placeholder="you@email.com" /></div>
+            <div class="form-row"><label for="bookingPhone">Phone / WhatsApp</label><input type="tel" id="bookingPhone" required placeholder="+27 82 000 0000" /></div>
+          </div>
           <div class="form-row"><label for="bookingGuests">Guests</label><input type="number" id="bookingGuests" min="1" max="20" value="1" /></div>
+          <div class="form-row"><label for="bookingCoupon">Coupon code <span class="optional">(optional)</span></label><input type="text" id="bookingCoupon" placeholder="e.g. WELCOME10" autocomplete="off" /></div>
           <div class="form-row"><label for="bookingNotes">Notes <span class="optional">(optional)</span></label><textarea id="bookingNotes" rows="2"></textarea></div>
           <button type="submit" class="btn btn--primary btn--block" id="bookingSubmitBtn">Confirm Booking</button>
         </form>
@@ -188,7 +207,27 @@
   </a>`
     : "";
 
-  const extrasHtml = bookingModalHtml + whatsappFabHtml;
+  const faqWidgetHtml =
+    page !== "dashboard" && page !== "admin"
+      ? `<aside class="faq-widget" id="faqWidget" aria-label="Help assistant">
+    <button type="button" class="faq-widget__toggle" id="faqToggle" aria-expanded="false">?</button>
+    <div class="faq-widget__panel" id="faqPanel" hidden>
+      <h3 class="faq-widget__title">Ask KMM</h3>
+      <form id="faqForm">
+        <input type="text" id="faqQuestion" placeholder="Ask about check-in, payments…" required />
+        <div class="faq-widget__actions">
+          <button type="submit" class="btn btn--primary btn--sm" data-faq-mode="faq">Ask</button>
+          <button type="button" class="btn btn--ghost btn--sm" id="faqSuggestBtn">Find rooms</button>
+        </div>
+      </form>
+      <p class="faq-widget__error" id="faqError" hidden></p>
+      <p class="faq-widget__answer" id="faqAnswer" hidden></p>
+      <div class="faq-widget__rooms" id="faqRoomSuggestions" hidden></div>
+    </div>
+  </aside>`
+      : "";
+
+  const extrasHtml = bookingModalHtml + whatsappFabHtml + faqWidgetHtml;
 
   const headerEl = document.getElementById("site-header");
   const footerEl = document.getElementById("site-footer");
@@ -202,5 +241,99 @@
 
   if (typeof KmmI18n !== "undefined") {
     KmmI18n.apply();
+  }
+
+  document.getElementById("faqToggle")?.addEventListener("click", () => {
+    const panel = document.getElementById("faqPanel");
+    const btn = document.getElementById("faqToggle");
+    if (!panel) return;
+    const open = panel.hidden;
+    panel.hidden = !open;
+    btn?.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  function escapeFaqHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = str || "";
+    return d.innerHTML;
+  }
+
+  function renderFaqRoomSuggestions(rooms) {
+    const box = document.getElementById("faqRoomSuggestions");
+    if (!box) return;
+    if (!rooms?.length) {
+      box.hidden = true;
+      box.innerHTML = "";
+      return;
+    }
+    box.innerHTML = rooms
+      .map(
+        (r) => `
+      <a class="faq-widget__room" href="room-detail.html?id=${encodeURIComponent(r.id)}">
+        <strong>${escapeFaqHtml(r.name)}</strong>
+        <span>${r.pricePerNight ? `R${r.pricePerNight}/night` : "Quote"} · ${r.maxGuests} guests</span>
+      </a>`
+      )
+      .join("");
+    box.hidden = false;
+  }
+
+  async function runFaqAssistant(mode) {
+    const input = document.getElementById("faqQuestion");
+    const answerEl = document.getElementById("faqAnswer");
+    const errorEl = document.getElementById("faqError");
+    const question = input?.value.trim();
+    if (!question) return;
+    errorEl.hidden = true;
+    answerEl.hidden = true;
+    renderFaqRoomSuggestions([]);
+    if (typeof KmmApi === "undefined" || !(await KmmApi.init()) || !KmmApi.isAvailable()) {
+      errorEl.textContent = "Start the server (npm start) to use the assistant.";
+      errorEl.hidden = false;
+      return;
+    }
+    try {
+      const ctx = window.KmmFaqContext || {};
+      const isSuggest = mode === "suggest";
+      const path = isSuggest ? "/search/suggest" : "/search/faq";
+      const body = isSuggest
+        ? { question }
+        : {
+            question,
+            roomName: ctx.roomName || "",
+            price: ctx.price || "",
+            amenities: ctx.amenities || "",
+          };
+      const data = await KmmApi.request(path, { method: "POST", body });
+      answerEl.textContent = data.answer || "No answer.";
+      answerEl.hidden = false;
+      if (isSuggest) renderFaqRoomSuggestions(data.rooms);
+    } catch (err) {
+      errorEl.textContent = err.message || "Could not get an answer.";
+      errorEl.hidden = false;
+    }
+  }
+
+  document.getElementById("faqForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    runFaqAssistant("faq");
+  });
+
+  document.getElementById("faqSuggestBtn")?.addEventListener("click", () => {
+    runFaqAssistant("suggest");
+  });
+
+  function loadScript(src) {
+    if (document.querySelector(`script[src="${src}"]`)) return;
+    const s = document.createElement("script");
+    s.src = src;
+    s.defer = true;
+    document.body.appendChild(s);
+  }
+
+  loadScript("seo.js");
+  loadScript("pwa-register.js");
+  if (page !== "dashboard" && page !== "admin") {
+    loadScript("faq-chat.js");
   }
 })();

@@ -17,8 +17,12 @@
     loyalty: "dash.loyalty",
     language: "dash.language",
     currency: "dash.currency",
+    messages: "dash.messages",
     support: "dash.support",
   };
+
+  let bookingTab = "upcoming";
+  let bookingsCache = [];
 
   function showAuth() {
     authScreen?.classList.remove(HIDDEN);
@@ -68,42 +72,77 @@
     }
   }
 
-  async function renderBookings() {
+  function todayIso() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function isUpcomingBooking(b) {
+    if (["cancelled", "rejected", "checked_out"].includes(b.status)) return false;
+    const today = todayIso();
+    if (b.checkOut && b.checkOut < today) return false;
+    if (!b.checkIn && !b.checkOut) return ["pending", "confirmed", "checked_in"].includes(b.status);
+    return true;
+  }
+
+  function statusLabel(s) {
+    return (
+      {
+        pending: "Pending",
+        confirmed: "Confirmed",
+        checked_in: "Checked in",
+        checked_out: "Checked out",
+        cancelled: "Cancelled",
+        rejected: "Rejected",
+      }[s] || s
+    );
+  }
+
+  function bookingCardHtml(b) {
+    const status = b.status || "pending";
+    const canCancel = bookingTab === "upcoming" && ["pending", "confirmed"].includes(status);
+    const ref = b.bookingReference || b.id;
+    const total =
+      b.totalAmount > 0 ? `R${Math.round(b.totalAmount).toLocaleString("en-ZA")}` : "";
+    return `
+        <article class="dash-card">
+          <div class="dash-card__head">
+            <h3>${escapeHtml(b.roomName || b.package)}</h3>
+            <span class="dash-badge dash-badge--${escapeHtml(status)}">${statusLabel(status)}</span>
+          </div>
+          <p class="dash-card__meta">
+            Ref: ${escapeHtml(ref)}<br />
+            Check-in: ${escapeHtml(b.checkIn || "—")}<br />
+            ${b.checkOut ? `Check-out: ${escapeHtml(b.checkOut)}<br />` : ""}
+            Guests: ${escapeHtml(String(b.guests || "—"))} · ${b.payment === "cash" ? "Pay Cash" : "Book Online"}<br />
+            ${total ? `Total: <strong>${total}</strong><br />` : ""}
+            Booked: ${formatDate(b.createdAt)}
+          </p>
+          <div class="dash-card__actions">
+            <a href="confirmation.html?ref=${encodeURIComponent(ref)}" class="dash-btn dash-btn--ghost">View details</a>
+            ${canCancel ? `<button type="button" class="dash-btn dash-btn--danger js-cancel-booking" data-id="${escapeHtml(b.id)}">Cancel booking</button>` : ""}
+          </div>
+        </article>`;
+  }
+
+  function renderBookingsList() {
     const el = document.getElementById("bookingsList");
     if (!el) return;
-    let list = [];
-    try {
-      list = await KmmClient.getMyBookings();
-    } catch (err) {
-      el.innerHTML = `<div class="dash-empty dash-empty--error">${escapeHtml(err.message || "Could not load bookings.")} Make sure you ran <strong>npm start</strong> and open <a href="http://localhost:3000/dashboard.html">localhost:3000</a>.</div>`;
-      return;
-    }
 
-    if (!list.length) {
+    const filtered = bookingsCache.filter((b) =>
+      bookingTab === "upcoming" ? isUpcomingBooking(b) : !isUpcomingBooking(b)
+    );
+
+    if (!bookingsCache.length) {
       el.innerHTML = `<div class="dash-empty">No bookings yet. <a href="rooms.html">Book a stay</a> and they'll appear here when you're signed in.</div>`;
       return;
     }
 
-    el.innerHTML = list
-      .map((b) => {
-        const status = b.status || "confirmed";
-        const cancelled = status === "cancelled";
-        return `
-        <article class="dash-card">
-          <div class="dash-card__head">
-            <h3>${escapeHtml(b.package)}</h3>
-            <span class="dash-badge dash-badge--${cancelled ? "cancelled" : "confirmed"}">${cancelled ? "Cancelled" : "Confirmed"}</span>
-          </div>
-          <p class="dash-card__meta">
-            Check-in: ${escapeHtml(b.checkIn || "—")}<br />
-            ${b.checkOut ? `Check-out: ${escapeHtml(b.checkOut)}<br />` : ""}
-            Guests: ${escapeHtml(String(b.guests || "—"))} · ${b.payment === "cash" ? "Pay Cash" : "Book Online"}<br />
-            Booked: ${formatDate(b.createdAt)}
-          </p>
-          ${!cancelled ? `<div class="dash-card__actions"><button type="button" class="dash-btn dash-btn--danger js-cancel-booking" data-id="${escapeHtml(b.id)}">Cancel booking</button></div>` : ""}
-        </article>`;
-      })
-      .join("");
+    if (!filtered.length) {
+      el.innerHTML = `<div class="dash-empty">No ${bookingTab === "upcoming" ? "upcoming" : "past"} bookings.</div>`;
+      return;
+    }
+
+    el.innerHTML = filtered.map(bookingCardHtml).join("");
 
     el.querySelectorAll(".js-cancel-booking").forEach((btn) => {
       btn.addEventListener("click", async () => {
@@ -113,6 +152,130 @@
         }
       });
     });
+  }
+
+  async function renderBookings() {
+    const el = document.getElementById("bookingsList");
+    if (!el) return;
+    try {
+      bookingsCache = await KmmClient.getMyBookings();
+    } catch (err) {
+      el.innerHTML = `<div class="dash-empty dash-empty--error">${escapeHtml(err.message || "Could not load bookings.")} Make sure you ran <strong>npm start</strong> and open <a href="http://localhost:3000/dashboard.html">localhost:3000</a>.</div>`;
+      return;
+    }
+    renderBookingsList();
+  }
+
+  async function renderNotifications() {
+    const listEl = document.getElementById("notifyList");
+    const badge = document.getElementById("notifyBadge");
+    if (!listEl) return;
+
+    let data;
+    try {
+      data = await KmmClient.getNotifications();
+    } catch {
+      listEl.innerHTML = `<li class="dash-notify__empty">Could not load</li>`;
+      return;
+    }
+
+    const unread = data.unread || 0;
+    if (badge) {
+      if (unread > 0) {
+        badge.textContent = unread > 9 ? "9+" : String(unread);
+        badge.hidden = false;
+      } else {
+        badge.hidden = true;
+      }
+    }
+
+    const items = data.notifications || [];
+    if (!items.length) {
+      listEl.innerHTML = `<li class="dash-notify__empty">No notifications yet</li>`;
+      return;
+    }
+
+    listEl.innerHTML = items
+      .map(
+        (n) => `
+      <li class="dash-notify__item ${n.unread ? "dash-notify__item--unread" : ""}" data-id="${escapeHtml(n.id)}" data-type="${escapeHtml(n.type)}">
+        <strong>${escapeHtml(n.title)}</strong>
+        <span>${escapeHtml(n.body || "")}</span>
+        <span style="display:block;margin-top:0.25rem;font-size:0.7rem">${formatDate(n.createdAt)}</span>
+      </li>`
+      )
+      .join("");
+
+    listEl.querySelectorAll(".dash-notify__item").forEach((li) => {
+      li.addEventListener("click", async () => {
+        await KmmClient.markNotificationRead(li.dataset.id);
+        if (li.dataset.type === "message") switchPanel("messages");
+        else if (li.dataset.type === "booking") switchPanel("bookings");
+        else if (li.dataset.type === "payment") switchPanel("invoices");
+        closeNotifyPanel();
+        await renderNotifications();
+      });
+    });
+  }
+
+  function closeNotifyPanel() {
+    document.getElementById("notifyPanel")?.setAttribute("hidden", "");
+    document.getElementById("notifyBellBtn")?.setAttribute("aria-expanded", "false");
+  }
+
+  function setupNotifications() {
+    const btn = document.getElementById("notifyBellBtn");
+    const panel = document.getElementById("notifyPanel");
+    if (!btn || !panel || btn.dataset.bound) return;
+    btn.dataset.bound = "1";
+
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const open = panel.hidden;
+      panel.hidden = !open;
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) await renderNotifications();
+    });
+
+    document.getElementById("notifyMarkAll")?.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      await KmmClient.markAllNotificationsRead();
+      await renderNotifications();
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!document.getElementById("dashNotify")?.contains(e.target)) closeNotifyPanel();
+    });
+  }
+
+  async function renderMessages() {
+    const inbox = document.getElementById("messagesInbox");
+    if (!inbox) return;
+
+    let messages = [];
+    try {
+      messages = await KmmClient.getMessages();
+    } catch (err) {
+      inbox.innerHTML = `<div class="dash-empty dash-empty--error">${escapeHtml(err.message || "Could not load messages.")}</div>`;
+      return;
+    }
+
+    if (!messages.length) {
+      inbox.innerHTML = `<div class="dash-empty">No messages yet.</div>`;
+      return;
+    }
+
+    inbox.innerHTML = messages
+      .map(
+        (m) => `
+      <div class="dash-inbox__msg ${m.fromStaff ? "dash-inbox__msg--staff" : "dash-inbox__msg--user"}">
+        ${escapeHtml(m.body)}
+        <time>${formatDate(m.createdAt)}</time>
+      </div>`
+      )
+      .join("");
+
+    inbox.scrollTop = inbox.scrollHeight;
   }
 
   async function renderFavorites() {
@@ -173,11 +336,96 @@
     set("profileEmail", user.email);
     set("profilePhone", user.phone);
     set("profileAddress", user.address);
+
+    const verifyBanner = document.getElementById("emailVerifyBanner");
+    const resendBtn = document.getElementById("resendVerifyBtn");
+    if (user.emailVerified) {
+      verifyBanner?.setAttribute("hidden", "");
+      resendBtn?.setAttribute("hidden", "");
+    } else {
+      if (verifyBanner) {
+        verifyBanner.textContent = "Your email is not verified. Check your inbox or resend the link.";
+        verifyBanner.removeAttribute("hidden");
+      }
+      resendBtn?.removeAttribute("hidden");
+    }
+
+    const twoFaStatus = document.getElementById("twoFaStatus");
+    const setupBtn = document.getElementById("twoFaSetupBtn");
+    const disableForm = document.getElementById("twoFaDisableForm");
+    const setupPanel = document.getElementById("twoFaSetup");
+    if (user.totpEnabled) {
+      if (twoFaStatus) twoFaStatus.textContent = "Two-factor authentication is enabled.";
+      setupBtn?.setAttribute("hidden", "");
+      setupPanel?.setAttribute("hidden", "");
+      disableForm?.removeAttribute("hidden");
+    } else {
+      if (twoFaStatus) twoFaStatus.textContent = "Two-factor authentication is off.";
+      setupBtn?.removeAttribute("hidden");
+      disableForm?.setAttribute("hidden", "");
+    }
+  }
+
+  async function renderPayments() {
+    const el = document.getElementById("paymentsList");
+    if (!el || typeof KmmPayments === "undefined") return;
+    let list = [];
+    try {
+      list = await KmmPayments.listMine();
+    } catch {
+      el.innerHTML = "";
+      return;
+    }
+    if (!list.length) {
+      el.innerHTML = "";
+      return;
+    }
+    el.innerHTML = `
+      <h3 class="dash-subtitle">Payments</h3>
+      ${list
+        .map(
+          (p) => `
+        <article class="dash-card">
+          <div class="dash-card__head">
+            <h3>${escapeHtml(p.bookingReference || p.bookingId)}</h3>
+            <span class="dash-badge dash-badge--${p.status === "completed" ? "paid" : "pending"}">${escapeHtml(KmmPayments.formatStatus(p.status))}</span>
+          </div>
+          <p class="dash-card__meta">
+            ${escapeHtml(p.package || "Booking")} · ${KmmPayments.formatAmount(p)}<br />
+            ${escapeHtml(p.method)} · ${formatDate(p.createdAt)}
+          </p>
+          ${
+            p.status !== "completed" && p.status !== "refunded" && p.method !== "cash"
+              ? `<div class="dash-card__actions"><button type="button" class="dash-btn dash-btn--primary js-pay-booking" data-booking="${escapeHtml(p.bookingId)}">Pay now</button></div>`
+              : ""
+          }
+        </article>`
+        )
+        .join("")}`;
+
+    el.querySelectorAll(".js-pay-booking").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          const user = KmmClient.getCurrentUser();
+          const result = await KmmPayments.initiateCheckout(btn.dataset.booking, {
+            email: user?.email,
+          });
+          if (result.checkoutUrl) window.location.href = result.checkoutUrl;
+          else alert(result.instructions || "Use EFT on your confirmation page.");
+        } catch (err) {
+          alert(err.message || "Could not start payment.");
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    });
   }
 
   async function renderInvoices() {
     const el = document.getElementById("invoicesList");
     if (!el) return;
+    await renderPayments();
     let list = [];
     try {
       list = await KmmClient.getInvoices();
@@ -188,8 +436,11 @@
 
     if (!list.length) {
       el.innerHTML = `<div class="dash-empty">No invoices yet. Invoices are created when you book while signed in.</div>`;
+      document.getElementById("deleteAllInvoicesBtn")?.setAttribute("hidden", "");
       return;
     }
+
+    document.getElementById("deleteAllInvoicesBtn")?.removeAttribute("hidden");
 
     el.innerHTML = list
       .map((inv) => {
@@ -218,32 +469,24 @@
             Date: ${formatDate(inv.createdAt)} · ${inv.payment === "cash" ? "Cash" : "Online"}
           </p>
           <div class="dash-card__actions">
-            <button type="button" class="dash-btn dash-btn--ghost js-download-inv" data-id="${escapeHtml(inv.id)}">Download</button>
+            <a href="invoice-print.html?id=${encodeURIComponent(inv.id)}" class="dash-btn dash-btn--ghost" target="_blank" rel="noopener">Print / PDF</a>
+            <button type="button" class="dash-btn dash-btn--danger js-delete-inv" data-id="${escapeHtml(inv.id)}">Delete</button>
           </div>
         </article>`;
       })
       .join("");
 
-    el.querySelectorAll(".js-download-inv").forEach((btn) => {
-      btn.addEventListener("click", () => {
+    el.querySelectorAll(".js-delete-inv").forEach((btn) => {
+      btn.addEventListener("click", async () => {
         const inv = list.find((i) => i.id === btn.dataset.id);
         if (!inv) return;
-        const text = [
-          "KMM Lifestyle — Invoice",
-          "",
-          `Invoice ID: ${inv.id}`,
-          `Guest: ${inv.guestName}`,
-          `Package: ${inv.package}`,
-          `Amount: ${inv.amount}`,
-          `Status: ${inv.status}`,
-          `Date: ${formatDate(inv.createdAt)}`,
-        ].join("\n");
-        const blob = new Blob([text], { type: "text/plain" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `${inv.id}.txt`;
-        a.click();
-        URL.revokeObjectURL(a.href);
+        if (!confirm(`Delete invoice for "${inv.package}"? This cannot be undone.`)) return;
+        try {
+          await KmmClient.deleteInvoice(inv.id);
+          renderInvoices();
+        } catch (err) {
+          alert(err.message || "Could not delete invoice.");
+        }
       });
     });
   }
@@ -395,6 +638,36 @@
       data.points < 500 ? 500 : data.points < 1500 ? 1500 : data.points < 3000 ? 3000 : data.points;
     const progress = Math.min(100, (data.points / nextTier) * 100);
 
+    let dealsHtml = "";
+    if (typeof KmmApi !== "undefined" && KmmApi.isAvailable()) {
+      try {
+        const dealsRes = await KmmApi.request("/marketing/deals");
+        const deals = dealsRes.deals || [];
+        if (deals.length) {
+          dealsHtml = `
+        <div class="loyalty-deals" style="margin-top:1.25rem">
+          <h2 class="dash-subtitle">Member offers</h2>
+          <div class="dash-cards">
+            ${deals
+              .slice(0, 3)
+              .map(
+                (d) => `
+              <article class="dash-card">
+                <p><strong>${escapeHtml(d.name)}</strong> — ${escapeHtml(d.label)}</p>
+                ${d.couponCode ? `<p class="dash-card__meta">Code: <code>${escapeHtml(d.couponCode)}</code></p>` : ""}
+                <p class="dash-card__meta">${escapeHtml(d.description || "")}</p>
+              </article>`
+              )
+              .join("")}
+          </div>
+          <p class="dash-card__meta" style="margin-top:0.5rem">Your ${data.tier.name} tier includes ${data.tier.discount} off eligible stays — mention at booking.</p>
+        </div>`;
+        }
+      } catch {
+        /* optional */
+      }
+    }
+
     el.innerHTML = `
       <div class="loyalty-card">
         <span style="font-size:0.8rem;color:var(--muted,#a89f94)">Your balance</span>
@@ -404,6 +677,7 @@
         <div class="loyalty-progress"><div class="loyalty-progress__bar" style="width:${progress}%"></div></div>
         <p style="font-size:0.8rem;color:var(--muted,#a89f94);margin-top:0.75rem">${nextTier - data.points > 0 ? `${nextTier - data.points} points to next tier` : "Top tier reached!"}</p>
       </div>
+      ${dealsHtml}
       <h2 class="dash-subtitle">Recent points</h2>
       <div class="dash-cards">
         ${(data.history || []).slice(0, 8).map((h) => `
@@ -415,12 +689,15 @@
 
   async function renderAll() {
     renderProfile();
+    setupNotifications();
     await Promise.all([
       renderBookings(),
       renderFavorites(),
       renderInvoices(),
       renderSubscription(),
       renderLoyalty(),
+      renderNotifications(),
+      renderMessages(),
     ]);
   }
 
@@ -437,16 +714,9 @@
     });
   });
 
-  document.querySelectorAll("[data-social]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const result = await KmmClient.socialLogin(btn.dataset.social);
-      if (result.ok) await showDashboard();
-      else if (result.error) {
-        registerError.textContent = result.error;
-        registerError.hidden = false;
-      }
-    });
-  });
+  let pending2faToken = "";
+
+  const twoFaForm = document.getElementById("twoFaForm");
 
   loginForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -454,10 +724,33 @@
       document.getElementById("loginEmail").value,
       document.getElementById("loginPassword").value
     );
+    if (result.ok && result.requires2fa) {
+      pending2faToken = result.pendingToken;
+      loginForm.hidden = true;
+      twoFaForm?.removeAttribute("hidden");
+      loginError.hidden = true;
+      return;
+    }
     if (result.ok) await showDashboard();
     else {
       loginError.textContent = result.error;
       loginError.hidden = false;
+    }
+  });
+
+  twoFaForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const twoFaError = document.getElementById("twoFaError");
+    const result = await KmmClient.verify2fa(
+      pending2faToken,
+      document.getElementById("twoFaCode").value
+    );
+    if (result.ok) {
+      pending2faToken = "";
+      await showDashboard();
+    } else {
+      twoFaError.textContent = result.error;
+      twoFaError.hidden = false;
     }
   });
 
@@ -481,11 +774,81 @@
     showAuth();
   });
 
+  document.getElementById("deleteAllInvoicesBtn")?.addEventListener("click", async () => {
+    if (!confirm("Delete all your invoices? This cannot be undone.")) return;
+    try {
+      await KmmClient.deleteAllInvoices();
+      renderInvoices();
+    } catch (err) {
+      alert(err.message || "Could not delete all invoices.");
+    }
+  });
+
+  document.querySelectorAll("[data-booking-tab]").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      bookingTab = tab.dataset.bookingTab;
+      document.querySelectorAll("[data-booking-tab]").forEach((t) => {
+        t.classList.toggle("dash-tabs__btn--active", t === tab);
+      });
+      renderBookingsList();
+    });
+  });
+
+  document.getElementById("messageForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const bodyEl = document.getElementById("messageBody");
+    const text = bodyEl?.value.trim();
+    if (!text) return;
+    try {
+      await KmmClient.sendMessage(text);
+      bodyEl.value = "";
+      await renderMessages();
+      await renderNotifications();
+    } catch (err) {
+      alert(err.message || "Could not send message.");
+    }
+  });
+
   document.querySelectorAll(".dash-nav__item").forEach((btn) => {
     btn.addEventListener("click", () => {
       switchPanel(btn.dataset.panel);
       if (btn.dataset.panel === "subscribe") renderSubscription();
+      if (btn.dataset.panel === "messages") renderMessages();
     });
+  });
+
+  document.getElementById("resendVerifyBtn")?.addEventListener("click", async () => {
+    const result = await KmmClient.resendVerification();
+    alert(result.message || result.error || "Done.");
+  });
+
+  document.getElementById("twoFaSetupBtn")?.addEventListener("click", async () => {
+    const result = await KmmClient.setup2fa();
+    if (!result.ok) {
+      alert(result.error);
+      return;
+    }
+    document.getElementById("twoFaSecret").textContent = result.secret;
+    document.getElementById("twoFaUri").textContent = result.otpauthUrl;
+    document.getElementById("twoFaSetup")?.removeAttribute("hidden");
+    document.getElementById("twoFaSetupBtn")?.setAttribute("hidden", "");
+  });
+
+  document.getElementById("twoFaConfirmBtn")?.addEventListener("click", async () => {
+    const code = document.getElementById("twoFaConfirmCode").value;
+    const result = await KmmClient.confirm2fa(code);
+    alert(result.ok ? "Two-factor authentication enabled." : result.error);
+    if (result.ok) renderProfile();
+  });
+
+  document.getElementById("twoFaDisableForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const result = await KmmClient.disable2fa(
+      document.getElementById("twoFaDisablePassword").value,
+      document.getElementById("twoFaDisableCode").value
+    );
+    alert(result.ok ? "2FA disabled." : result.error);
+    if (result.ok) renderProfile();
   });
 
   document.getElementById("profileForm")?.addEventListener("submit", async (e) => {

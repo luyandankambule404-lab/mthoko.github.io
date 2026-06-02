@@ -169,6 +169,7 @@ function parseBooking(row) {
   }
   return {
     id: row.id,
+    bookingReference: row.booking_reference || row.id,
     createdAt: row.created_at,
     source: row.source,
     package: row.package,
@@ -184,6 +185,8 @@ function parseBooking(row) {
     eventTypes,
     userId: row.user_id,
     status: row.status,
+    roomId: row.room_id || "",
+    totalAmount: Number(row.total_amount || 0),
   };
 }
 

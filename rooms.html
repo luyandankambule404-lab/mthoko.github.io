@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="features.css" />
 </head>
 <body data-page="rooms">
   <div id="site-header"></div>
@@ -40,7 +41,7 @@
     </section>
     <section class="rooms section">
       <div class="container">
-        <div class="rooms__grid">
+        <div class="rooms__grid" id="roomsGrid">
           <article class="room-card">
             <div class="room-card__top">
               <span class="room-card__type">Luxury Stay</span>
@@ -53,7 +54,7 @@
               <li>Secure Parking</li>
               <li>Peaceful Environment</li>
             </ul>
-            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Standard Night Stay" data-price="R750/night">Book Now</button>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Standard Night Stay">Find dates &amp; book</button>
           </article>
           <article class="room-card room-card--featured">
             <span class="room-card__badge">Popular</span>
@@ -68,7 +69,7 @@
               <li>Communal Kitchen Access</li>
               <li>Weekly Cleaning Service</li>
             </ul>
-            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Shared Unit Stay" data-price="R1400/night">Reserve Now</button>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Shared Unit Stay">Find dates &amp; book</button>
           </article>
           <article class="room-card">
             <div class="room-card__top">
@@ -82,7 +83,7 @@
               <li>Priority Booking</li>
               <li>Laundry Service Available</li>
             </ul>
-            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Weekly Stay Package" data-price="Pay Weekly">Book Weekly</button>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Weekly Stay Package">Find dates &amp; book</button>
           </article>
           <article class="room-card">
             <div class="room-card__top">
@@ -96,7 +97,7 @@
               <li>Access to All Facilities</li>
               <li>Long-term Convenience</li>
             </ul>
-            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Monthly Rental Package" data-price="R8000/month">Book Monthly</button>
+            <button type="button" class="btn btn--primary btn--block js-book-open" data-package="Monthly Rental Package">Find dates &amp; book</button>
           </article>
         </div>
       </div>
@@ -107,8 +108,13 @@
   <script src="api.js"></script>
   <script src="client-store.js"></script>
   <script src="bookings-store.js"></script>
+  <script src="accommodation-store.js"></script>
+  <script src="booking-flow.js"></script>
+  <script src="image-utils.js"></script>
+  <script src="rooms-page.js"></script>
   <script src="i18n.js"></script>
   <script src="site-paths.js"></script>
+  <script src="bank-details.js"></script>
   <script src="layout.js"></script>
   <script src="site-features.js"></script>
   <script src="script.js"></script>

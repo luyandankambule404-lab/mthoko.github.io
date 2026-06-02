@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="features.css" />
 </head>
 <body data-page="about">
   <div id="site-header"></div>
@@ -20,22 +21,101 @@
         <p>Premium accommodation in Vanderbijlpark — security, tranquility, and modern living.</p>
       </div>
     </section>
+
     <section class="about section">
       <div class="container about__grid">
-        <div class="about__media">
-          <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80" alt="Luxury hotel interior at KMM Lifestyle" loading="lazy" />
+        <figure class="about__media">
+          <img
+            id="aboutInteriorImg"
+            src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=900&q=80"
+            alt="Interior at KMM Lifestyle — luxury accommodation in Vanderbijlpark"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption class="about__caption" id="aboutInteriorCaption">Interior at KMM Lifestyle</figcaption>
           <div class="about__badge">
             <span>Premium</span>
             <strong>Hospitality</strong>
           </div>
-        </div>
+        </figure>
         <div class="about__content">
+          <span class="section__tag">Our space</span>
+          <h2 class="section__title">Elegant <em>interiors</em></h2>
           <p>KMM Lifestyle provides premium accommodation solutions, offering comfortable and affordable single and shared units. We prioritize tenant satisfaction and strive to create a seamless rental experience.</p>
-          <p>Located in Vanderbijlpark, our property combines security, tranquility, and modern living — whether you need a night, a week, or a month.</p>
+          <p>Every unit is thoughtfully furnished — warm lighting, modern finishes, and the calm atmosphere guests expect from a luxury stay in Vanderbijlpark.</p>
           <div class="about__actions">
-            <a href="contact.html" class="btn btn--primary">About Us</a>
-            <a href="rooms.html" class="btn btn--ghost">See Our Services</a>
+            <a href="gallery.html" class="btn btn--primary">View gallery</a>
+            <a href="rooms.html" class="btn btn--ghost">See our rooms</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-photos">
+      <div class="container">
+        <span class="section__tag">Gallery</span>
+        <h2 class="section__title">Life at <em>KMM Lifestyle</em></h2>
+        <p class="about-photos__lead">A glimpse of our rooms, shared spaces, and the calm atmosphere guests enjoy in Vanderbijlpark.</p>
+        <div class="about-photos__grid" id="aboutPhotosGrid" aria-label="Property photos"></div>
+        <div class="about-photos__actions">
+          <a href="gallery.html" class="btn btn--outline">View full gallery</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section facilities-section">
+      <div class="container">
+        <span class="section__tag">Amenities</span>
+        <h2>Property <em>Facilities</em></h2>
+        <div class="facilities__grid" id="facilitiesGrid">
+          <article class="facility-card">
+            <span class="facility-card__icon" aria-hidden="true">◆</span>
+            <h3>Reception</h3>
+            <p>24-hour front desk</p>
+          </article>
+          <article class="facility-card">
+            <span class="facility-card__icon" aria-hidden="true">◇</span>
+            <h3>Secure parking</h3>
+            <p>On-site parking for guests</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-location">
+      <div class="container about-location__grid">
+        <div class="about-location__info">
+          <span class="section__tag">Location</span>
+          <h2>Visit <em>KMM Lifestyle</em></h2>
+          <p class="about-location__lead">We are in Vanderbijlpark, Gauteng — easy to reach from Johannesburg and the Vaal Triangle.</p>
+          <address class="about-location__address">
+            <strong>KMM Lifestyle</strong><br />
+            Plot 64 Nannescol<br />
+            Vanderbijlpark, 1911<br />
+            South Africa
+          </address>
+          <ul class="about-location__contact">
+            <li><span>Phone</span> <a href="tel:+27826226770">+27 82 622 6770</a></li>
+            <li><span>Email</span> <a href="mailto:info@kmmlifestyle.co.za">info@kmmlifestyle.co.za</a></li>
+          </ul>
+          <div class="about-location__actions">
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=Plot+64+Nannescol,+Vanderbijlpark,+1911,+South+Africa"
+              class="btn btn--primary"
+              target="_blank"
+              rel="noopener"
+            >Get directions</a>
+            <a href="contact.html" class="btn btn--ghost">Contact us</a>
+          </div>
+        </div>
+        <div class="about-location__map">
+          <iframe
+            class="contact__map-iframe about-location__iframe"
+            title="KMM Lifestyle location on Google Maps"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Plot+64+Nannescol,+Vanderbijlpark,+1911,+South+Africa&hl=en&z=15&output=embed"
+          ></iframe>
         </div>
       </div>
     </section>
@@ -45,10 +125,15 @@
   <script src="api.js"></script>
   <script src="client-store.js"></script>
   <script src="bookings-store.js"></script>
+  <script src="accommodation-store.js"></script>
+  <script src="image-utils.js"></script>
   <script src="i18n.js"></script>
   <script src="site-paths.js"></script>
+  <script src="bank-details.js"></script>
   <script src="layout.js"></script>
+  <script src="about-page.js"></script>
   <script src="site-features.js"></script>
+  <script src="booking-flow.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

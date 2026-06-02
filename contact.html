@@ -48,6 +48,16 @@
             <a href="https://www.airbnb.com/" target="_blank" rel="noopener">Airbnb</a>
             <a href="https://www.expedia.com/" target="_blank" rel="noopener">Expedia</a>
           </div>
+          <div class="contact__map">
+            <h3 class="contact__map-title">Find us</h3>
+            <iframe
+              class="contact__map-iframe"
+              title="KMM Lifestyle on Google Maps"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Plot+64+Nannescol,+Vanderbijlpark,+1911,+South+Africa&hl=en&z=15&output=embed"
+            ></iframe>
+          </div>
         </div>
         <form class="contact__form" id="contactForm">
           <div class="form-row">
@@ -61,6 +71,12 @@
               <option value="7-Day Ultimate Experience">7-Day Ultimate Experience</option>
               <option value="Private Event / Celebration">Private Event / Celebration</option>
               <option value="General Inquiry">General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-row" id="contactEventTypeRow" hidden>
+            <label for="contactEventType">Event type</label>
+            <select id="contactEventType" name="eventType">
+              <option value="">Select an event</option>
             </select>
           </div>
           <fieldset class="payment-picker">
@@ -82,8 +98,9 @@
               </label>
             </div>
           </fieldset>
-          <p class="payment-hint" id="contactPaymentHintOnline">Your booking is saved on our site. We will contact you for payment — no email app redirect.</p>
+          <p class="payment-hint" id="contactPaymentHintOnline">Pay by EFT using the bank details below.</p>
           <p class="payment-hint" id="contactPaymentHintCash" hidden>Cash payments are made at check-in. We'll confirm your reservation via WhatsApp.</p>
+          <div id="contactTransferPanel" class="booking-transfer-panel"></div>
           <div class="form-row form-row--half">
             <div>
               <label for="checkIn">Check-in</label>
@@ -94,17 +111,22 @@
               <input type="date" id="checkOut" name="checkOut" />
             </div>
           </div>
-          <div class="form-row">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" required placeholder="Your name" />
-          </div>
-          <div class="form-row">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required placeholder="you@email.com" />
-          </div>
-          <div class="form-row">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone" required placeholder="+27 ..." />
+          <p class="booking-signed-in-hint" id="contactSignedInHint" hidden>
+            Booking as <strong id="contactSignedInName"></strong> · <span id="contactSignedInEmail"></span>
+          </p>
+          <div id="contactGuestFields">
+            <div class="form-row">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required placeholder="Your name" />
+            </div>
+            <div class="form-row">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required placeholder="you@email.com" />
+            </div>
+            <div class="form-row">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" required placeholder="+27 ..." />
+            </div>
           </div>
           <div class="form-row">
             <label for="message">Message</label>
@@ -120,10 +142,13 @@
   <script src="api.js"></script>
   <script src="client-store.js"></script>
   <script src="bookings-store.js"></script>
+  <script src="accommodation-store.js"></script>
   <script src="i18n.js"></script>
   <script src="site-paths.js"></script>
+  <script src="bank-details.js"></script>
   <script src="layout.js"></script>
   <script src="site-features.js"></script>
+  <script src="booking-flow.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

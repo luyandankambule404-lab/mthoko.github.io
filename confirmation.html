@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="View and confirm your KMM Lifestyle booking details." />
+  <title>KMM Lifestyle | Booking Confirmation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="confirmation">
+  <div id="site-header"></div>
+  <main class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <span class="section__tag">Booking</span>
+        <h1>Booking <em>Confirmation</em></h1>
+        <p id="confirmIntro">Checking your booking details…</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" style="max-width: 760px;">
+        <div id="confirmationLoading" class="card" style="padding:1.25rem;">Loading booking…</div>
+        <div id="confirmationError" class="card" style="padding:1.25rem;" hidden>
+          <p>Booking not found. Please check your link or contact support on WhatsApp.</p>
+          <a href="rooms.html" class="btn btn--primary">Back to Rooms</a>
+        </div>
+
+        <div id="confirmationContent" hidden>
+          <article class="card" style="padding:1.25rem;">
+            <h2 style="margin-bottom:0.75rem;">Hi <span id="confirmGuestName">Guest</span></h2>
+            <div class="booking-transfer-panel" id="confirmBankPanel" hidden></div>
+            <ul class="booking-transfer-panel__list" style="margin-top:0.5rem;">
+              <li><span>Reference</span><strong id="confirmReference">—</strong></li>
+              <li><span>Status</span><strong id="confirmStatus">—</strong></li>
+              <li><span>Package</span><strong id="confirmPackage">—</strong></li>
+              <li><span>Check-in</span><strong id="confirmCheckIn">—</strong></li>
+              <li><span>Check-out</span><strong id="confirmCheckOut">—</strong></li>
+              <li><span>Guests</span><strong id="confirmGuests">—</strong></li>
+              <li><span>Total</span><strong id="confirmTotal">—</strong></li>
+              <li><span>Payment Method</span><strong id="confirmPayment">—</strong></li>
+              <li><span>Payment Status</span><strong id="confirmPaymentStatus">—</strong></li>
+              <li><span>Email</span><strong id="confirmEmail">—</strong></li>
+              <li><span>Phone</span><strong id="confirmPhone">—</strong></li>
+            </ul>
+            <div style="display:grid;gap:0.75rem;margin-top:1rem;">
+              <button type="button" id="confirmPayOnlineBtn" class="btn btn--primary" hidden>Pay with card</button>
+              <a href="#" id="confirmWhatsApp" class="btn btn--whatsapp" target="_blank" rel="noopener">Chat on WhatsApp</a>
+              <a href="rooms.html" class="btn btn--ghost">Book another stay</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <div id="site-extras"></div>
+  <script src="api.js"></script>
+  <script src="payments-store.js"></script>
+  <script src="bank-details.js"></script>
+  <script src="i18n.js"></script>
+  <script src="site-paths.js"></script>
+  <script src="layout.js"></script>
+  <script src="site-features.js"></script>
+  <script src="script.js"></script>
+  <script src="confirmation.js"></script>
+</body>
+</html>

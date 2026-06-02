@@ -28,21 +28,23 @@
         <button type="button" class="dash-auth__tab dash-auth__tab--active" data-auth-tab="login">Sign In</button>
         <button type="button" class="dash-auth__tab" data-auth-tab="register">Register</button>
       </div>
-      <div class="social-login">
-        <p class="social-login__label" data-i18n="social.continue">Continue with</p>
-        <div class="social-login__btns">
-          <button type="button" class="social-btn social-btn--google" data-social="Google">G Google</button>
-          <button type="button" class="social-btn social-btn--apple" data-social="Apple"> Apple</button>
-          <button type="button" class="social-btn social-btn--facebook" data-social="Facebook">f Facebook</button>
-        </div>
-      </div>
       <form id="loginForm" class="dash-auth__panel">
         <label for="loginEmail">Email</label>
         <input type="email" id="loginEmail" required placeholder="you@email.com" />
         <label for="loginPassword">Password</label>
         <input type="password" id="loginPassword" required placeholder="Your password" />
         <p class="dash-error" id="loginError" hidden></p>
+        <p style="margin: 0 0 1rem; font-size: 0.88rem;">
+          <a href="forgot-password.html">Forgot password?</a>
+        </p>
         <button type="submit" class="dash-btn dash-btn--primary">Sign In</button>
+      </form>
+      <form id="twoFaForm" class="dash-auth__panel" hidden>
+        <p class="dash-auth__sub">Enter the 6-digit code from your authenticator app.</p>
+        <label for="twoFaCode">Authentication code</label>
+        <input type="text" id="twoFaCode" inputmode="numeric" autocomplete="one-time-code" required placeholder="000000" />
+        <p class="dash-error" id="twoFaError" hidden></p>
+        <button type="submit" class="dash-btn dash-btn--primary">Verify</button>
       </form>
       <form id="registerForm" class="dash-auth__panel" hidden>
         <label for="regName">Full name</label>
@@ -52,7 +54,7 @@
         <label for="regPhone">Phone</label>
         <input type="tel" id="regPhone" placeholder="+27 ..." />
         <label for="regPassword">Password</label>
-        <input type="password" id="regPassword" required minlength="4" placeholder="Create a password" />
+        <input type="password" id="regPassword" required minlength="8" placeholder="At least 8 characters" />
         <p class="dash-error" id="registerError" hidden></p>
         <button type="submit" class="dash-btn dash-btn--primary">Create Account</button>
       </form>
@@ -74,6 +76,7 @@
         <button type="button" class="dash-nav__item" data-panel="loyalty" data-i18n="dash.loyalty">★ Loyalty Rewards</button>
         <button type="button" class="dash-nav__item" data-panel="language" data-i18n="dash.language">🌐 Language</button>
         <button type="button" class="dash-nav__item" data-panel="currency" data-i18n="dash.currency">💱 Currency</button>
+        <button type="button" class="dash-nav__item" data-panel="messages" data-i18n="dash.messages">✉ Messages</button>
         <button type="button" class="dash-nav__item" data-panel="support" data-i18n="dash.support">💬 Support</button>
       </nav>
       <p class="dash-sidebar__user" id="sidebarUserName">Guest</p>
@@ -86,6 +89,19 @@
       <header class="dash-topbar">
         <h1 id="panelTitle">My Bookings</h1>
         <div class="dash-topbar__actions">
+          <div class="dash-notify" id="dashNotify">
+            <button type="button" class="dash-notify__btn" id="notifyBellBtn" aria-label="Notifications" aria-expanded="false">
+              🔔
+              <span class="dash-notify__badge" id="notifyBadge" hidden>0</span>
+            </button>
+            <div class="dash-notify__panel" id="notifyPanel" hidden>
+              <div class="dash-notify__head">
+                <strong>Notifications</strong>
+                <button type="button" class="dash-notify__mark" id="notifyMarkAll">Mark all read</button>
+              </div>
+              <ul class="dash-notify__list" id="notifyList"></ul>
+            </div>
+          </div>
           <a href="index.html" class="dash-topbar__link">View website</a>
           <button type="button" class="dash-btn dash-btn--ghost dash-btn--top" id="logoutBtn">Logout</button>
         </div>
@@ -93,6 +109,10 @@
 
       <section class="dash-panel dash-panel--active" id="panel-bookings">
         <p class="dash-panel__lead">View and manage your reservations at KMM Lifestyle.</p>
+        <div class="dash-tabs" role="tablist">
+          <button type="button" class="dash-tabs__btn dash-tabs__btn--active" data-booking-tab="upcoming" role="tab">Upcoming</button>
+          <button type="button" class="dash-tabs__btn" data-booking-tab="past" role="tab">Past</button>
+        </div>
         <div id="bookingsList" class="dash-cards"></div>
       </section>
 
@@ -117,10 +137,39 @@
           <button type="submit" class="dash-btn dash-btn--primary">Save Profile</button>
           <p class="dash-success" id="profileSuccess" hidden>Profile updated successfully.</p>
         </form>
+        <div class="dash-settings-card" id="profileSecurity" style="margin-top: 2rem;">
+          <h2 class="dash-subtitle">Account security</h2>
+          <p id="emailVerifyBanner" class="dash-error" hidden></p>
+          <button type="button" class="dash-btn dash-btn--ghost" id="resendVerifyBtn" hidden>Resend verification email</button>
+          <hr style="border: none; border-top: 1px solid var(--color-border, #333); margin: 1.25rem 0;" />
+          <p class="dash-panel__lead" id="twoFaStatus">Two-factor authentication is off.</p>
+          <div id="twoFaSetup" hidden>
+            <p class="dash-auth__sub" style="font-size: 0.85rem;">Secret: <code id="twoFaSecret"></code></p>
+            <p class="dash-auth__sub" style="font-size: 0.8rem; word-break: break-all;" id="twoFaUri"></p>
+            <label for="twoFaConfirmCode">Confirm with code</label>
+            <input type="text" id="twoFaConfirmCode" inputmode="numeric" placeholder="000000" />
+            <button type="button" class="dash-btn dash-btn--primary" id="twoFaConfirmBtn">Enable 2FA</button>
+          </div>
+          <button type="button" class="dash-btn dash-btn--ghost" id="twoFaSetupBtn">Set up 2FA</button>
+          <form id="twoFaDisableForm" hidden style="margin-top: 1rem;">
+            <label for="twoFaDisablePassword">Password</label>
+            <input type="password" id="twoFaDisablePassword" required />
+            <label for="twoFaDisableCode">Authenticator code</label>
+            <input type="text" id="twoFaDisableCode" inputmode="numeric" required />
+            <button type="submit" class="dash-btn dash-btn--danger">Disable 2FA</button>
+          </form>
+        </div>
       </section>
 
       <section class="dash-panel" id="panel-invoices" hidden>
-        <p class="dash-panel__lead">Download and review invoices for your bookings.</p>
+        <div class="dash-panel__toolbar">
+          <p class="dash-panel__lead">Download invoices and view payment status for your bookings.</p>
+        </div>
+        <div id="paymentsList" class="dash-cards" style="margin-bottom: 1.5rem;"></div>
+        <div class="dash-panel__toolbar">
+          <p class="dash-panel__lead" style="margin: 0;">Invoices</p>
+          <button type="button" class="dash-btn dash-btn--danger" id="deleteAllInvoicesBtn" hidden>Delete All Invoices</button>
+        </div>
         <div id="invoicesList" class="dash-cards"></div>
       </section>
 
@@ -165,6 +214,16 @@
         </div>
       </section>
 
+      <section class="dash-panel" id="panel-messages" hidden>
+        <p class="dash-panel__lead">Message our team about bookings, payments, or your stay.</p>
+        <div class="dash-inbox" id="messagesInbox"></div>
+        <form id="messageForm" class="dash-inbox__compose">
+          <label for="messageBody" class="visually-hidden">Your message</label>
+          <textarea id="messageBody" rows="3" placeholder="Type your message…" required></textarea>
+          <button type="submit" class="dash-btn dash-btn--primary">Send</button>
+        </form>
+      </section>
+
       <section class="dash-panel" id="panel-support" hidden>
         <p class="dash-panel__lead">Contact our team on WhatsApp or by phone for help with your bookings.</p>
         <div class="dash-support-actions">
@@ -179,6 +238,8 @@
   <script src="api.js"></script>
   <script src="client-store.js"></script>
   <script src="bookings-store.js"></script>
+  <script src="payments-store.js"></script>
+  <script src="accommodation-store.js"></script>
   <script src="i18n.js"></script>
   <script src="site-features.js"></script>
   <script src="dashboard.js"></script>

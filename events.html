@@ -22,23 +22,72 @@
     </section>
     <section class="events section">
       <div class="container">
+        <p class="events__intro reveal">Choose your event type, then book the celebration you want.</p>
         <div class="events__grid">
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">🎂</span><h3>Birthday Party</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">💍</span><h3>Anniversary</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">👰</span><h3>Bridal Shower</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">🍼</span><h3>Baby Shower</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">🎓</span><h3>Graduation</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">💐</span><h3>Engagement Party</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">💼</span><h3>Corporate Event</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">🤝</span><h3>Team Building</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">👨‍👩‍👧‍👦</span><h3>Family Reunion</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">🕯️</span><h3>Memorial / Tribute</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">🎉</span><h3>Holiday Celebration</h3></article>
-          <article class="event-card reveal"><span class="event-card__icon" aria-hidden="true">🍽️</span><h3>Private Dinner</h3></article>
+          <article class="event-card js-event-card reveal" data-event="Birthday Party" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">🎂</span>
+            <h3>Birthday Party</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Birthday Party">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Anniversary" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">💍</span>
+            <h3>Anniversary</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Anniversary">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Bridal Shower" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">👰</span>
+            <h3>Bridal Shower</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Bridal Shower">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Baby Shower" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">🍼</span>
+            <h3>Baby Shower</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Baby Shower">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Graduation" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">🎓</span>
+            <h3>Graduation</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Graduation">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Engagement Party" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">💐</span>
+            <h3>Engagement Party</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Engagement Party">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Corporate Event" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">💼</span>
+            <h3>Corporate Event</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Corporate Event">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Team Building" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">🤝</span>
+            <h3>Team Building</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Team Building">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Family Reunion" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">👨‍👩‍👧‍👦</span>
+            <h3>Family Reunion</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Family Reunion">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Memorial / Tribute" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">🕯️</span>
+            <h3>Memorial / Tribute</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Memorial / Tribute">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Holiday Celebration" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">🎉</span>
+            <h3>Holiday Celebration</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Holiday Celebration">Book</button>
+          </article>
+          <article class="event-card js-event-card reveal" data-event="Private Dinner" tabindex="0" role="button" aria-pressed="false">
+            <span class="event-card__icon" aria-hidden="true">🍽️</span>
+            <h3>Private Dinner</h3>
+            <button type="button" class="btn btn--ghost btn--sm js-book-open" data-package="Private Event / Celebration" data-price="Custom quote" data-event="Private Dinner">Book</button>
+          </article>
         </div>
         <div class="events__cta reveal">
-          <p>Ready to celebrate? Book your event through our reservation form.</p>
-          <button type="button" class="btn btn--primary js-book-open" data-package="Private Event / Celebration" data-price="Custom quote">Book Your Event</button>
+          <p id="eventsSelectedLabel" class="events__selected">Tap an event above to select it.</p>
+          <button type="button" class="btn btn--primary" id="eventsBookSelectedBtn" disabled>Book Selected Event</button>
         </div>
       </div>
     </section>
@@ -48,10 +97,13 @@
   <script src="api.js"></script>
   <script src="client-store.js"></script>
   <script src="bookings-store.js"></script>
+  <script src="accommodation-store.js"></script>
   <script src="i18n.js"></script>
   <script src="site-paths.js"></script>
+  <script src="bank-details.js"></script>
   <script src="layout.js"></script>
   <script src="site-features.js"></script>
+  <script src="booking-flow.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
