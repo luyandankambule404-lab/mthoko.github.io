@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="Posts by Mthokozisi Luyanda Nkambule — updates on life, football, technology, and more." />
+  <meta name="description" content="Download Examinations Council of Eswatini (ECESWA) past exam papers for JC and EGCSE learners." />
   <meta name="theme-color" content="#f5a623" />
-  <title>My Posts | Mthokozisi Luyanda Nkambule</title>
+  <title>Past Exam Papers | Mthokozisi Luyanda Nkambule</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script src="profile-fix.js?v=1"></script>
 </head>
-<body data-page="posts">
+<body data-page="papers">
   <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
   <div class="page-decor" aria-hidden="true"><span class="decor-ball decor-ball-1">⚽</span><span class="decor-ball decor-ball-2">⚽</span></div>
 
@@ -36,13 +36,37 @@
   <main>
     <section class="page-hero reveal">
       <a class="page-back" href="index.html">← Return to home</a>
-      <h1>My Posts</h1>
-      <p class="page-hero-lead">Thoughts, updates, and stories — published with the newest first</p>
+      <h1>Past Exam Papers</h1>
+      <p class="page-hero-lead">Free JC and EGCSE papers from the Examinations Council of Eswatini</p>
     </section>
 
-    <section class="section section-alt reveal" id="posts">
-      <div id="posts-feed" class="posts-feed" aria-live="polite"></div>
-      <p class="posts-hint">New posts are published by the site owner.</p>
+    <section class="section reveal" id="papers">
+      <p class="section-intro">
+        Choose your exam level and subject, then tap <strong>Download papers</strong>.
+        Learners are taken to the official ECESWA page for that subject, where question papers,
+        specimen papers, and examiner reports can be downloaded.
+      </p>
+
+      <div class="papers-toolbar">
+        <div class="papers-tabs" role="tablist" aria-label="Exam level">
+          <button type="button" class="papers-tab is-active" data-level="all">All</button>
+          <button type="button" class="papers-tab" data-level="JC">JC</button>
+          <button type="button" class="papers-tab" data-level="EGCSE">EGCSE</button>
+        </div>
+        <label class="papers-search-label">
+          Search subject
+          <input id="papers-search" type="search" class="papers-search" placeholder="Try Mathematics, Biology, siSwati…" autocomplete="off" />
+        </label>
+      </div>
+      <p id="papers-count" class="papers-count" aria-live="polite"></p>
+
+      <div id="papers-grid" class="papers-grid"></div>
+      <p id="papers-empty" class="papers-empty" hidden>No subjects match that search. Try another subject name.</p>
+
+      <p class="news-disclaimer">
+        Past papers belong to the <a href="https://www.examscouncil.org.sz/" target="_blank" rel="noopener noreferrer">Examinations Council of Eswatini (ECESWA)</a>.
+        This page helps learners find them quickly. Official contact: registrar@examscouncil.org.sz · (+268) 2417 8000.
+      </p>
     </section>
   </main>
 
@@ -52,7 +76,9 @@
     <p class="footer-links">
       <a href="index.html">Home</a>
       <span class="footer-dot">·</span>
-      <a href="contact.html">Contact</a>
+      <a href="https://www.examscouncil.org.sz/" target="_blank" rel="noopener noreferrer">ECESWA</a>
+      <span class="footer-dot">·</span>
+      <a href="https://wa.me/26878462761" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     </p>
   </footer>
 
@@ -62,9 +88,7 @@
   <button type="button" class="fab fab-top" id="back-top" aria-label="Back to top" hidden>
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
-
-  <script src="posts.js"></script>
-  <script src="posts-storage.js"></script>
   <script src="script.js"></script>
+  <script src="papers.js"></script>
 </body>
 </html>
