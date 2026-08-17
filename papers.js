@@ -225,7 +225,18 @@ function renderPapers() {
 function initPapersPage() {
   if (!document.getElementById("papers-grid")) return;
 
-  document.getElementById("papers-search")?.addEventListener("input", renderPapers);
+  const params = new URLSearchParams(location.search);
+  const query = params.get("q");
+  const level = params.get("level");
+  const search = document.getElementById("papers-search");
+  if (query && search) search.value = query;
+  if (level) {
+    document.querySelectorAll(".papers-tab").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.level === level);
+    });
+  }
+
+  search?.addEventListener("input", renderPapers);
 
   document.querySelectorAll(".papers-tab").forEach((tab) => {
     tab.addEventListener("click", () => {

@@ -2678,3 +2678,175 @@ body.news-modal-open {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ========== LEARNING PORTAL ========== */
+.learn-name-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: end;
+  margin: 0 0 1.5rem;
+}
+
+.learn-name-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  flex: 1 1 220px;
+}
+
+.learn-name-form input {
+  font: inherit;
+  min-height: 44px;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--white);
+}
+
+.learn-name-form input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+  border-color: var(--gold);
+}
+
+.learn-progress-wrap {
+  margin-bottom: 1.25rem;
+}
+
+.learn-progress-track {
+  height: 10px;
+  background: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.85rem;
+}
+
+.learn-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold-bright), var(--gold-deep));
+  transition: width 0.25s ease;
+}
+
+.learn-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+
+.learn-stat {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.learn-stat strong {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.learn-stat span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold-deep);
+}
+
+.learn-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0 0 1.75rem;
+}
+
+.learn-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.35rem 1.4rem 1.5rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.learn-card h3 {
+  margin: 0;
+}
+
+.learn-card p {
+  margin: 0;
+}
+
+.learn-card-meta {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--gold-deep);
+}
+
+.learn-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.learn-course-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.learn-course-head h2 {
+  margin-bottom: 0.25rem;
+}
+
+.learn-lessons {
+  display: grid;
+  gap: 1rem;
+}
+
+.learn-lesson {
+  padding: 1.25rem 1.4rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.learn-lesson.is-done {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, var(--white), var(--cream-dark));
+}
+
+.learn-lesson-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.learn-lesson-head h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.learn-lesson-head span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold-deep);
+  white-space: nowrap;
+}
+
+.landing-card--learn {
+  border-color: var(--gold-dark);
+  background: linear-gradient(145deg, #fff6e0, var(--white));
+}

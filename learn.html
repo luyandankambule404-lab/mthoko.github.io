@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="Posts by Mthokozisi Luyanda Nkambule — updates on life, football, technology, and more." />
+  <meta name="description" content="Free learning portal for JC and EGCSE learners in Eswatini — study notes, revision plans, and ECESWA past papers." />
   <meta name="theme-color" content="#f5a623" />
-  <title>My Posts | Mthokozisi Luyanda Nkambule</title>
+  <title>Learning Portal | Mthokozisi Luyanda Nkambule</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script src="profile-fix.js?v=1"></script>
 </head>
-<body data-page="posts">
+<body data-page="learn">
   <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
   <div class="page-decor" aria-hidden="true"><span class="decor-ball decor-ball-1">⚽</span><span class="decor-ball decor-ball-2">⚽</span></div>
 
@@ -37,13 +37,58 @@
   <main>
     <section class="page-hero reveal">
       <a class="page-back" href="index.html">← Return to home</a>
-      <h1>My Posts</h1>
-      <p class="page-hero-lead">Thoughts, updates, and stories — published with the newest first</p>
+      <h1>Learning Portal</h1>
+      <p class="page-hero-lead">Study notes, revision skills, and past papers for JC and EGCSE learners</p>
     </section>
 
-    <section class="section section-alt reveal" id="posts">
-      <div id="posts-feed" class="posts-feed" aria-live="polite"></div>
-      <p class="posts-hint">New posts are published by the site owner.</p>
+    <section class="section reveal" id="learn-home">
+      <p class="section-intro" id="learn-greeting">Welcome. Save your name to keep progress on this device.</p>
+
+      <form id="learn-name-form" class="learn-name-form">
+        <label>
+          Your name
+          <input id="learn-name" name="name" type="text" maxlength="40" placeholder="e.g. Sipho" autocomplete="nickname" />
+        </label>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+
+      <div class="learn-progress-wrap" aria-label="Course progress">
+        <div class="learn-progress-track"><div id="learn-progress-bar" class="learn-progress-bar"></div></div>
+        <div id="learn-stats" class="learn-stats"></div>
+      </div>
+
+      <div class="learn-quick">
+        <a class="btn btn-primary" href="papers.html">Download past papers</a>
+        <a class="btn btn-secondary" href="https://www.examscouncil.org.sz/" target="_blank" rel="noopener noreferrer">ECESWA website</a>
+      </div>
+
+      <div class="papers-toolbar">
+        <div class="papers-tabs learn-tabs" role="tablist" aria-label="Course level">
+          <button type="button" class="papers-tab learn-tab is-active" data-level="all">All</button>
+          <button type="button" class="papers-tab learn-tab" data-level="Skills">Skills</button>
+          <button type="button" class="papers-tab learn-tab" data-level="JC">JC</button>
+          <button type="button" class="papers-tab learn-tab" data-level="EGCSE">EGCSE</button>
+        </div>
+        <label class="papers-search-label">
+          Search courses
+          <input id="learn-search" type="search" class="papers-search" placeholder="Try Mathematics, Biology, English…" autocomplete="off" />
+        </label>
+      </div>
+
+      <div id="learn-grid" class="papers-grid"></div>
+      <p id="learn-empty" class="papers-empty" hidden>No courses match that search. Try another subject.</p>
+    </section>
+
+    <section class="section" id="learn-course" hidden>
+      <a class="page-back" href="learn.html">← All courses</a>
+      <div class="learn-course-head">
+        <div>
+          <h2 id="learn-course-title">Course</h2>
+          <p id="learn-course-lead" class="dashboard-hint"></p>
+        </div>
+        <a id="learn-course-papers" class="btn btn-secondary" href="papers.html">Past papers</a>
+      </div>
+      <div id="learn-lessons" class="learn-lessons"></div>
     </section>
   </main>
 
@@ -53,7 +98,9 @@
     <p class="footer-links">
       <a href="index.html">Home</a>
       <span class="footer-dot">·</span>
-      <a href="contact.html">Contact</a>
+      <a href="papers.html">Past Papers</a>
+      <span class="footer-dot">·</span>
+      <a href="https://wa.me/26878462761" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     </p>
   </footer>
 
@@ -63,9 +110,7 @@
   <button type="button" class="fab fab-top" id="back-top" aria-label="Back to top" hidden>
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
-
-  <script src="posts.js"></script>
-  <script src="posts-storage.js"></script>
   <script src="script.js"></script>
+  <script src="learn.js"></script>
 </body>
 </html>
